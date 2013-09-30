@@ -8,7 +8,7 @@
 </head>
 <body>
 <center><%=request.getAttribute("msg")%><br />
-<br />
+<br/>
 <a href="index.jsp">Index</a></center>
 </body>
 </html>
