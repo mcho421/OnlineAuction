@@ -7,7 +7,7 @@
 <title>Sign In</title>
 </head>
 <body>
-A
+
 <form name="loginform" action="login" method = "post">
 <table>
 <tr>
