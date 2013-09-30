@@ -8,6 +8,7 @@
 </head>
 <body>
 <form name="loginform" action="login" method = "post">
+hi
 <table>
 <tr>
 <td>Enter User Name:</td><td> <input type = "text" name="username"></td>
