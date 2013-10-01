@@ -46,48 +46,39 @@ public class Login extends HttpServlet {
 		RequestDispatcher rd = null;
 		
 		String msg = " ";
-		
-		Connection conn = null;
-		String url = "jdbc:postgresql://localhost:5432/JDBC";
-		String driver = "org.postgresql.Driver";
-		String username = "postgres";
-		String password = "1234";
-		
-		
 		try {
-			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection(url,username, password);
+			DBconn newdb = new DBconn();
+			Connection conn = newdb.getConn();
 			if(conn!=null){System.out.println("fuck!!");}
 			String sqlQuery = "select * from user_info where username =  '"+un+"' and userpwd = '"+pw+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
-			if(rs.next()){
-				msg = "hello " + un +" suc!";
+			if(rs.next()) {
+			String username = rs.getString(1);
+			String password = rs.getString(2);
+			if(un.equals(username)&&pw.equals(password)) {
+				//msg = "hello" + un +"suc!";
+				HttpSession session = request.getSession();
+				session.setAttribute("username", username);
+				UserBean user = new UserBean();
+				user.Initialize(username);
+				request.setAttribute("UserBean",user);
+				rd =request.getRequestDispatcher("/UserIndex.jsp");
+				rd.forward(request, response);
+				}
 			}
-			else {
-				msg = "hello "+un+" failed";
-			}
+				else {
+					msg = "invalid username or password!";
+					request.setAttribute("msg", msg);
+					rd =request.getRequestDispatcher("/Login.jsp");
+					rd.forward(request, response);
+				}
 			st.close();
 			rs.close();
 		}catch  (Exception e) {
 			e.printStackTrace();
 		}
-		if(un.equals(username)&&pw.equals(password)) {
-		//msg = "hello" + un +"suc!";
-		HttpSession session = request.getSession();
-		session.setAttribute("username", username);
-		rd =request.getRequestDispatcher("/UserIndex.jsp");
-		UserBean user = new UserBean();
-		user.Initialize(username);
-		request.setAttribute("UserBean",user);
-		rd.forward(request, response);
-		}
-		else {
-			msg = "invalid username or password!";
-			request.setAttribute("msg", msg);
-			rd =request.getRequestDispatcher("/Login.jsp");
-			rd.forward(request, response);
-		}
+
 		/*response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println("<font size = '6' color =red>"+msg+"</font>");*/

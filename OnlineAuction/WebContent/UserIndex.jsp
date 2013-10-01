@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import = "group.UserBean" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -18,38 +19,75 @@ scope="request" />
 Object username=session.getAttribute("username"); 
 %> 
 <script language="javascript">
-if(username  =="") {
-	window.location.href=basePath+'Login.jsp';
+if(session.isNew()) {
+	System.out.println("log in");
+	response.sendRedirect("\Login.jsp");
+	//RequestDispatcher rd = null;
+	//rd = sc.getRequestDispatcher("/Login.jsp"); 
+	//rd.forward(request, response);
+	//window.location.href=basePath+'Login.jsp';
+}
+function on_submit()
+{
+ if (updateform.txtFname.value == "")
+   {
+    alert("Enter Your First Name");
+    updateform.txtFname.focus();
+    return false;
+   }
+
+ if (updateform.txtUpwd.value == "")
+   {
+    alert("Enter Your Password");
+    updateform.txtUpwd.focus();
+    return false;
+   }
+   if (updateform.txtLname.value == "")
+   {
+    alert("Enter Your Last Name");
+    updateform.txtLname.focus();
+    return false;
+   }
+   if (updateform.txtYOB.value == "")
+   {
+    alert("Enter Your Year of Birth");
+    updateform.txtYOB.focus();
+    return false;
+   }
+   if (updateform.txtAddress.value == "")
+   {
+    alert("Enter Your Full Address");
+    updateform.txtAddress.focus();
+    return false;
+   }
+   if (updateform.txtCCN.value == "")
+   {
+    alert("Enter Your Credit Card Number");
+    updateform.txtCCN.focus();
+    return false;
+   }
 }
 </script>
 <table>
 <tr>
-<td><font size = '6' color =red>"<%=username%>"</font></td>
+<td><font size = '4' color =red>Hello, <%=username%></font></td>
 </tr>
 <tr>
-<td>Offer an item</td>
-<td>items on auction</td>
-<td>items on auction</td>
-<td>items on auction</td>
+<td><input type="button" onclick="window.location.href='Register.jsp'" value ="Offer an item"></td>
+<td><input type="button" onclick="window.location.href='Register.jsp'" value ="items on auction"></td>
+<td><input type="button" onclick="window.location.href='Register.jsp'" value ="message"></td>
+<td><input type="button" onclick="window.location.href='Register.jsp'" value ="logout"></td>
 </tr>
 </table>
-<form name="form1" method="post" action="register" onSubmit="return on_submit()">
-
+<form name="updateform" method="post" action="update" onSubmit="return on_submit()">
 <table>
-
 <tr>
 <td>Username</td>
-<td><input type = "text" name = "txtUname" value="<%=UserBean.getUsername()%>"/></td>
+<td><%=UserBean.getUsername()%></td>
 </tr>
-
 <tr>
 <td>Password</td>
 <td><input type = "password" name = "txtUpwd" value="<%=UserBean.getUserpwd()%>"/></td>
-</tr>
-<tr>
-<td>Reenter Password </td>
-<td><input type = "password" name = "txtUpwd2" value="<%=UserBean.getUserpwd()%>"/></td>
-<td><font color =red><%=UserBean.getErrorMsg("password")%></font></td>
 </tr>
 <tr>
 <td>Email</td>
@@ -57,52 +95,32 @@ if(username  =="") {
 <td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
 </tr>
 <tr>
-<td><input type ="submit" value="Continue" ></td>
-<td></td>
-</tr>
-<tr>
 <td>First Name</td>
-<td><input type = "text" name = "txtUemail" value="<%=UserBean.getFname()%>"/></td>
-<td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
-</tr>
-<tr>
-<td><input type ="submit" value="Continue" ></td>
-<td></td>
+<td><input type = "text" name = "txtFname" value="<%=UserBean.getFname()%>"/></td>
+<td><font color =red><%=UserBean.getErrorMsg("fname")%></font></td>
 </tr>
 <tr>
 <td>Last Name</td>
-<td><input type = "text" name = "txtUemail" value="<%=UserBean.getLname()%>"/></td>
-<td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
-</tr>
-<tr>
-<td><input type ="submit" value="Continue" ></td>
-<td></td>
+<td><input type = "text" name = "txtLname" value="<%=UserBean.getLname()%>"/></td>
+<td><font color =red><%=UserBean.getErrorMsg("lname")%></font></td>
 </tr>
 <tr>
 <td>Year of Birth</td>
-<td><input type = "text" name = "txtUemail" value="<%=UserBean.getYearofbirth()%>"/></td>
-<td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
-</tr>
-<tr>
-<td><input type ="submit" value="Continue" ></td>
-<td></td>
+<td><input type = "text" name = "txtYOB" value="<%=UserBean.getYearofbirth()%>"/></td>
+<td><font color =red><%=UserBean.getErrorMsg("yearofbirth")%></font></td>
 </tr>
 <tr>
 <td>Address</td>
-<td><input type = "text" name = "txtUemail" value="<%=UserBean.getFulladdress()%>"/></td>
-<td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
+<td><input type = "text" name = "txtAddress" value="<%=UserBean.getFulladdress()%>"/></td>
+<td><font color =red><%=UserBean.getErrorMsg("address")%></font></td>
 </tr>
 <tr>
-<td><input type ="submit" value="Continue" ></td>
-<td></td>
+<td>Credit Card Number</td>
+<td><input type = "text" name = "txtCCN" value="<%=UserBean.getCreditcard()%>"/></td>
+<td><font color =red><%=UserBean.getErrorMsg("creditcard")%></font></td>
 </tr>
 <tr>
-<td>Address</td>
-<td><input type = "text" name = "txtUemail" value="<%=UserBean.getCreditcard()%>"/></td>
-<td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
-</tr>
-<tr>
-<td><input type ="submit" value="Continue" ></td>
+<td><input type ="submit" value="Update" ></td>
 <td></td>
 </tr>
 
