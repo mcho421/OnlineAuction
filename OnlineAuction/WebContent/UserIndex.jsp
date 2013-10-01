@@ -80,7 +80,7 @@ if(username  =="") {
 </tr>
 <tr>
 <td>Year of Birth</td>
-<td><input type = "text" name = "txtUemail" value="<%=UserBean.getYearofbrirth()%>"/></td>
+<td><input type = "text" name = "txtUemail" value="<%=UserBean.getYearofbirth()%>"/></td>
 <td><font color =red><%=UserBean.getErrorMsg("email")%></font></td>
 </tr>
 <tr>
