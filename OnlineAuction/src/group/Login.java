@@ -3,12 +3,14 @@ package group;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.sql.*;
 
@@ -41,6 +43,7 @@ public class Login extends HttpServlet {
 		System.out.println("in service method");
 		String un = request.getParameter("username");
 		String pw = request.getParameter("password");
+		RequestDispatcher rd = null;
 		
 		String msg = " ";
 		
@@ -69,15 +72,25 @@ public class Login extends HttpServlet {
 		}catch  (Exception e) {
 			e.printStackTrace();
 		}
-		/*if(un.equals(username)&&pw.equals(password)) {
-		msg = "hello" + un +"suc!";
+		if(un.equals(username)&&pw.equals(password)) {
+		//msg = "hello" + un +"suc!";
+		HttpSession session = request.getSession();
+		session.setAttribute("username", username);
+		rd =request.getRequestDispatcher("/UserIndex.jsp");
+		UserBean user = new UserBean();
+		user.Initialize(username);
+		request.setAttribute("UserBean",user);
+		rd.forward(request, response);
 		}
 		else {
-			msg = "failed";
-		}*/
-		response.setContentType("text/html");
+			msg = "invalid username or password!";
+			request.setAttribute("msg", msg);
+			rd =request.getRequestDispatcher("/Login.jsp");
+			rd.forward(request, response);
+		}
+		/*response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
-		out.println("<font size = '6' color =red>"+msg+"</font>");
+		out.println("<font size = '6' color =red>"+msg+"</font>");*/
 	}
 
 }
