@@ -19,7 +19,7 @@ scope="request" />
 Object username=session.getAttribute("username"); 
 %> 
 <script language="javascript">
-if(session.isNew()) {
+if(username==null) {
 	System.out.println("log in");
 	response.sendRedirect("\Login.jsp");
 	//RequestDispatcher rd = null;
