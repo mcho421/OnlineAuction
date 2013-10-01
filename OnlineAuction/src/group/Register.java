@@ -57,14 +57,10 @@ public class Register extends HttpServlet {
 			rd.forward(request, response);
 			return;
 		}
-		Connection conn = null;
-		String url = "jdbc:postgresql://localhost:5432/JDBC";
-		String driver = "org.postgresql.Driver";
-		String dbname = "postgres";
-		String password = "1234";
+
 		try {
-			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection(url,dbname, password);
+			DBconn newdb = new DBconn();
+			Connection conn = newdb.getConn();
 			String sqlQuery = "select * from user_info where username =  '"+username+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
@@ -83,8 +79,8 @@ public class Register extends HttpServlet {
 			e.printStackTrace();
 		}
 		try {
-			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection(url,dbname, password);
+			DBconn newdb = new DBconn();
+			Connection conn = newdb.getConn();
 			String sqlQuery = "select * from user_info where useremail =  '"+useremail+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
@@ -116,8 +112,8 @@ public class Register extends HttpServlet {
 			e1.printStackTrace();
 		}
 		try {
-			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection(url,dbname, password);
+			DBconn newdb = new DBconn();
+			Connection conn = newdb.getConn();
 			String sqlQuery = "INSERT INTO user_info(username, userpwd, useremail,namemd5)VALUES ('"+username+"', '"+userpwd+"', '"+useremail+"', '"+namemd5+"');";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);

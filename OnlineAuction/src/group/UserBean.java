@@ -8,14 +8,14 @@ import java.util.Hashtable;
 
 public class UserBean {
 	private int userid;
-	private String username;
-	private String userpwd;
-	private String useremail;
-	private String fname;
-	private String lname;
-	private String yearofbirth;
-	private String fulladdress;
-	private String creditcard;
+	private String username = "";
+	private String userpwd = "";
+	private String useremail= "";
+	private String fname = "";
+	private String lname = "";
+	private String yearofbirth = "";
+	private String fulladdress = "";
+	private String creditcard = "";
 	public int getUserid() {
 		return userid;
 	}
@@ -71,25 +71,29 @@ public class UserBean {
 		this.creditcard = creditcard;
 	}
 	public void Initialize(String Username) {
-		Connection conn = null;
-		String url = "jdbc:postgresql://localhost:5432/JDBC";
-		String driver = "org.postgresql.Driver";
-		String dbname = "postgres";
-		String password = "1234";
+
 		try {
-			Class.forName(driver).newInstance();
-			conn = DriverManager.getConnection(url,dbname, password);
-			String sqlQuery = "SELECT username, userpwd, useremail,fname, lname, yearofbirth, fulladdress, creditcard FROM user_info; where username =  '"+Username+"'";
+			DBconn newdb = new DBconn();
+			Connection conn = newdb.getConn();
+			if(conn!=null) System.out.println("connected");
+			String sqlQuery = "SELECT username, userpwd, useremail,fname, lname, yearofbirth, fulladdress, creditcard FROM user_info where username =  '"+Username+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
+			if(rs.next()){
             username = rs.getString(1);
             userpwd = rs.getString(2);
             useremail = rs.getString(3);
-            yearofbirth = rs.getString(4);
-            fname = rs.getString(5);
-            lname = rs.getString(6);
+            yearofbirth = rs.getString(6);
+            if(yearofbirth==null) yearofbirth = "";
+            fname = rs.getString(4);
+            if(fname==null) fname = "";
+            lname = rs.getString(5);
+            if(lname==null) lname = "";
             fulladdress = rs.getString(7);
-            creditcard = rs.getString(8);            
+            if(fulladdress==null) fulladdress = "";
+            creditcard = rs.getString(8); 
+            if(creditcard==null) creditcard = "";
+			}
 			st.close();
 			rs.close();
 		}catch  (Exception e) {
@@ -99,14 +103,6 @@ public class UserBean {
 	private Hashtable<String, String> errors= new Hashtable<String, String>();
 	public boolean validte() {
 		boolean okAll = true;
-		if (username.length()>10 || username.length()<6) {
-			errors.put("name", "The length of username must be between 6 and 10.");
-			okAll = false;
-		}
-		if(!username.matches("[a-zA-Z0-9_-]+")) {
-			errors.put("name", "The content of username must be numbers, alphabets or mixing above.");
-			okAll = false;
-		}
 		if (userpwd.length() > 10 ||userpwd.length() < 6) {
 		    errors.put("password","The length of password must be between 6 and 10");
 		    okAll = false;
@@ -119,6 +115,26 @@ public class UserBean {
 		if(!useremail.matches("[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)+")){
 		    errors.put("email", "Invalide email address, all the alphabets must be lower case.");
 		    okAll = false;
+		   }
+		if(!fname.matches("[a-zA-Z-]+")) {
+			errors.put("fname", "invalid first name.");
+			okAll = false;
+		}
+		if(!lname.matches("[a-zA-Z-]+")) {
+			errors.put("lname", "invalid last name.");
+			okAll = false;
+		}
+		if(yearofbirth.length()!=4||!yearofbirth.matches("[0-9-]+")) {
+			errors.put("yearofbirth", "invalid, Year of birth must be 4 numbers like : 1949");
+			okAll = false;
+		}
+		if(creditcard.length()!=16||!creditcard.matches("[0-9-]+")) {
+			errors.put("creditcard", "invalid credit card number.");
+			okAll = false;
+		}
+		if(!fulladdress.matches("[0-9a-zA-Z ,]+")){
+			errors.put("address", "invalid address.");
+			okAll = false;			
 		}
 		return okAll;
 	}
