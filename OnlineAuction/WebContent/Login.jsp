@@ -16,6 +16,7 @@
 <tr>
 <td>Enter Password:</td><td> <input name="password" type="password"></td>
 </tr>
+<tr><td><font color =red><%=request.getAttribute("msg")%></font></td></tr>
 <tr>
 <td><input type="submit" value ="Sign In"></td>
 <td><input type="button" onclick="window.location.href='Register.jsp'" value ="Sign Up Now"></td>
