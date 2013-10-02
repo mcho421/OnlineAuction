@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context debug="1" reloadable="true" crossContext="true">
   <Resource name="jdbc/database" auth="Container"
-          type="javax.sql.DataSource" username="postgres" password="larryWall123"
+          type="javax.sql.DataSource" username="postgres" password="1234"
           driverClassName="org.postgresql.Driver" 
           url="jdbc:postgresql://localhost:5432/test"
           maxActive="8" maxIdle="4" maxWait="10000"/>
