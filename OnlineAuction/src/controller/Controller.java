@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exceptions.ServiceLocatorException;
+import jdbc.MailSender;
+import exceptions.MailSenderException;
 import jdbc.DBConnectionFactory;
 
 /**
@@ -68,6 +72,27 @@ public class Controller extends HttpServlet {
 			e.printStackTrace();
 		}
 		System.out.println("foo");
+		try {
+			MailSender m = MailSender.getMailSender();
+			StringBuffer b = new StringBuffer();
+			b.append("test email body");
+			try {
+				m.sendMessage("onlineauctionnotifier@gmail.com", "mathewchong7@gmail.com", "notification", b);
+			} catch (AddressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (ServiceLocatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MailSenderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("bar");
     }
 
 	/**
