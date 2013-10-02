@@ -5,8 +5,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exceptions.ServiceLocatorException;
+import jdbc.MailSender;
+import exceptions.MailSenderException;
 import jdbc.DBConnectionFactory;
 
 /**
@@ -24,6 +30,7 @@ import jdbc.DBConnectionFactory;
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static Logger logger = Logger.getLogger(Controller.class.getName());
+	private static Map<String, Command> commandMap;
        
     /**
      * @throws ServletException 
@@ -31,58 +38,38 @@ public class Controller extends HttpServlet {
      */
     public Controller() throws ServletException {
         super();
-		Connection con;
-		try {
-			con = DBConnectionFactory.getConnection();
-		} catch (ServiceLocatorException e) {
-			logger.severe("Trouble connecting to database "+e.getStackTrace());
-			throw new ServletException();
-		} catch (SQLException e) {
-			logger.severe("Trouble connecting to database "+e.getStackTrace());
-			throw new ServletException();
-		}
-		Statement stmnt;
-		try {
-			stmnt = con.createStatement();
-			stmnt.setFetchSize(1000);
-			String query_cast = "SELECT id, username, password, email FROM Users";
-			ResultSet res = stmnt.executeQuery(query_cast);
-			logger.info("The result set size is "+res.getFetchSize());
-			while(res.next()){
-				int id = res.getInt("id");
-				logger.info(" "+id);
-				String name = res.getString("username");
-				logger.info(name);
-				String pass = res.getString("password");
-				logger.info(pass);
-				String email = res.getString("email");
-				logger.info(email);
-				logger.info(name+" "+pass+" "+email);
-			}
-			
-			res.close();
-			stmnt.close();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("foo");
+        commandMap = new HashMap<String, Command>();
+        commandMap.put(null, new CommandIndexPage());
+        commandMap.put("registerPage", new CommandRegisterPage());
+        commandMap.put("register", new CommandRegister());
+        commandMap.put("regConfirm", new CommandRegisterConfirm());
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/HelloWorld.jsp");
-		dispatcher.forward(request, response);
+		processRequest(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		processRequest(request, response);
+	}
+
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action = request.getParameter("action");
+		Command command = commandMap.get(action);
+		String page = "/WEB-INF/error.jsp";
+		if (command != null) {
+			page = command.execute(request, response);
+		} else {
+			request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+		}
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+		dispatcher.forward(request, response);
 	}
 
 }

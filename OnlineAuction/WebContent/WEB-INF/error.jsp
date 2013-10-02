@@ -4,11 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Registration</title>
+<title>Online Auction</title>
 </head>
 <body>
-<center><%=request.getAttribute("msg")%><br />
-<br/>
-<a href="controller">Index</a></center>
+<h1> An Error Occurred! </h1>
+${errorMsg}
+<h2> Return to the home page ? </h2>
+<form action="controller">
+	<input type="submit" name="goBack" value="Go Back"/>
+</form>
 </body>
 </html>

@@ -4,9 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Online Auction</title>
 </head>
 <body>
-Hello World!
+<h1> Registration Confirmed! </h1>
+You are now officially registered.
+<h2> Return to the home page ? </h2>
+<form action="controller">
+	<input type="submit" name="goBack" value="Go Back"/>
+</form>
 </body>
 </html>
