@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Hashtable;
 
+import jdbc.DBConnectionFactory;
+
 public class UserBean {
 	private int userid;
 	private String username = "";
@@ -73,10 +75,9 @@ public class UserBean {
 	public void Initialize(String Username) {
 
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
+			Connection conn = DBConnectionFactory.getConnection();
 			if(conn!=null) System.out.println("connected");
-			String sqlQuery = "SELECT username, userpwd, useremail,fname, lname, yearofbirth, fulladdress, creditcard FROM user_info where username =  '"+Username+"'";
+			String sqlQuery = "SELECT username, password, email, fname, lname, yearofbirth, fulladdress, creditcard FROM users where username =  '"+Username+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			if(rs.next()){
@@ -101,7 +102,7 @@ public class UserBean {
 		}
 	}
 	private Hashtable<String, String> errors= new Hashtable<String, String>();
-	public boolean validte() {
+	public boolean validate() {
 		boolean okAll = true;
 		if (userpwd.length() > 10 ||userpwd.length() < 6) {
 		    errors.put("password","The length of password must be between 6 and 10");
@@ -132,7 +133,7 @@ public class UserBean {
 			errors.put("creditcard", "invalid credit card number.");
 			okAll = false;
 		}
-		if(!fulladdress.matches("[0-9a-zA-Z ,]+")){
+		if(!fulladdress.matches("[0-9a-zA-Z ,-]+")){
 			errors.put("address", "invalid address.");
 			okAll = false;			
 		}
