@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
@@ -28,6 +30,7 @@ import jdbc.DBConnectionFactory;
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static Logger logger = Logger.getLogger(Controller.class.getName());
+	private static Map<String, Command> commandMap;
        
     /**
      * @throws ServletException 
@@ -35,6 +38,9 @@ public class Controller extends HttpServlet {
      */
     public Controller() throws ServletException {
         super();
+        commandMap = new HashMap<String, Command>();
+        commandMap.put(null, new CommandIndexPage());
+
 		Connection con;
 		try {
 			con = DBConnectionFactory.getConnection();
@@ -72,7 +78,7 @@ public class Controller extends HttpServlet {
 			e.printStackTrace();
 		}
 		System.out.println("foo");
-		try {
+/*		try {
 			MailSender m = MailSender.getMailSender();
 			StringBuffer b = new StringBuffer();
 			b.append("test email body");
@@ -92,14 +98,22 @@ public class Controller extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("bar");
+*/		System.out.println("bar");
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+		String action = request.getParameter("action");
+		Command command = commandMap.get(action);
+		String page = "/WEB-INF/error.jsp";
+		if (command != null) {
+			page = command.execute(request, response);
+		} else {
+			request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+		}
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
 		dispatcher.forward(request, response);
 	}
 
