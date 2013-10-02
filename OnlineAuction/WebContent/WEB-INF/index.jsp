@@ -14,7 +14,7 @@ select id, category from Categories
 <title>Auction Site</title>
 </head>
 <body>
-<a href="controller?action=login">Login</a> | <a href="controller?action=register">Register</a>
+<a href="controller?action=login">Login</a> | <a href="controller?action=registerPage">Register</a>
 <h1>Welcome to the Auction Site!</h1>
 Search:
 <form name="search" action="controller" method="GET">

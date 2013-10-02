@@ -40,71 +40,26 @@ public class Controller extends HttpServlet {
         super();
         commandMap = new HashMap<String, Command>();
         commandMap.put(null, new CommandIndexPage());
-
-		Connection con;
-		try {
-			con = DBConnectionFactory.getConnection();
-		} catch (ServiceLocatorException e) {
-			logger.severe("Trouble connecting to database "+e.getStackTrace());
-			throw new ServletException();
-		} catch (SQLException e) {
-			logger.severe("Trouble connecting to database "+e.getStackTrace());
-			throw new ServletException();
-		}
-		Statement stmnt;
-		try {
-			stmnt = con.createStatement();
-			stmnt.setFetchSize(1000);
-			String query_cast = "SELECT id, username, password, email FROM Users";
-			ResultSet res = stmnt.executeQuery(query_cast);
-			logger.info("The result set size is "+res.getFetchSize());
-			while(res.next()){
-				int id = res.getInt("id");
-				logger.info(" "+id);
-				String name = res.getString("username");
-				logger.info(name);
-				String pass = res.getString("password");
-				logger.info(pass);
-				String email = res.getString("email");
-				logger.info(email);
-				logger.info(name+" "+pass+" "+email);
-			}
-			
-			res.close();
-			stmnt.close();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("foo");
-/*		try {
-			MailSender m = MailSender.getMailSender();
-			StringBuffer b = new StringBuffer();
-			b.append("test email body");
-			try {
-				m.sendMessage("onlineauctionnotifier@gmail.com", "mathewchong7@gmail.com", "notification", b);
-			} catch (AddressException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (ServiceLocatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MailSenderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-*/		System.out.println("bar");
+        commandMap.put("registerPage", new CommandRegisterPage());
+        commandMap.put("register", new CommandRegister());
+        commandMap.put("regConfirm", new CommandRegisterConfirm());
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		processRequest(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		processRequest(request, response);
+	}
+
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		Command command = commandMap.get(action);
 		String page = "/WEB-INF/error.jsp";
@@ -115,13 +70,6 @@ public class Controller extends HttpServlet {
 		}
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
 		dispatcher.forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

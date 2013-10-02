@@ -77,6 +77,12 @@ public class MailSender{
 
 		logger.info("Sent message "+toAddress+" with subject "+mailSubject);
 	}
+
+	public void sendMessage(String toAddress, String mailSubject, StringBuffer text) throws AddressException, MessagingException{
+		Properties mailProps = session.getProperties();
+		String username = (String)mailProps.get("mail.smtp.user");
+		sendMessage(username, toAddress, mailSubject, text);
+	}
 	
 	public static MailSender getMailSender() throws ServiceLocatorException, MailSenderException{
 		if(sender==null)
