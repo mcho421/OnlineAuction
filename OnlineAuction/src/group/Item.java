@@ -190,14 +190,18 @@ private static Item makeItem(ResultSet rs) throws SQLException {
 	item.setSeller(rs.getInt(12));
 	return item;
 }
-public static List<Item> search(Connection conn, String searchItem) throws SQLException {
+public static List<Item> search(Connection conn, String searchItem, int category) throws SQLException {
 	List<Item> result = new ArrayList<Item>();
 	PreparedStatement st = null;
 	ResultSet rs = null;
 	try {
 		String sqlQuery = "select * from Items where title ILIKE ?";
+		if (category != 0)
+			sqlQuery = "select * from Items where title ILIKE ? AND category = ?";
 		st = conn.prepareStatement(sqlQuery);
 		st.setString(1, "%" + searchItem + "%");
+		if (category != 0)
+			st.setInt(2, category);
 		rs = st.executeQuery();
 		while (rs.next()) {
 			result.add(makeItem(rs));
