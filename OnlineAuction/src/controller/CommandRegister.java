@@ -47,7 +47,7 @@ public class CommandRegister implements Command {
 		new_user.setUserpwd(userpwd);
 		new_user.setUseremail(useremail);
 
-		if(!new_user.validte()){
+		if(!new_user.validate()){
 			System.out.println("invalid");
 			return registerPage;
 		}

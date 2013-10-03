@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import jdbc.DBConnectionFactory;
+
 /**
  * Servlet implementation class Register
  */
@@ -51,7 +53,7 @@ public class Register extends HttpServlet {
 		new_user.setUsername(username);
 		new_user.setUserpwd(userpwd);
 		new_user.setUseremail(useremail);
-		if(!new_user.validte()){
+		if(!new_user.validate()){
 			System.out.println("invalid");
 			rd =request.getRequestDispatcher("/Register.jsp");
 			rd.forward(request, response);
@@ -59,9 +61,8 @@ public class Register extends HttpServlet {
 		}
 
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			String sqlQuery = "select * from user_info where username =  '"+username+"'";
+			Connection conn = DBConnectionFactory.getConnection();
+			String sqlQuery = "select * from users where username =  '"+username+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			if(rs.next()){
@@ -79,9 +80,8 @@ public class Register extends HttpServlet {
 			e.printStackTrace();
 		}
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			String sqlQuery = "select * from user_info where useremail =  '"+useremail+"'";
+			Connection conn = DBConnectionFactory.getConnection();
+			String sqlQuery = "select * from users where email =  '"+useremail+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			if(rs.next()){
@@ -112,9 +112,8 @@ public class Register extends HttpServlet {
 			e1.printStackTrace();
 		}
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			String sqlQuery = "INSERT INTO user_info(username, userpwd, useremail,namemd5)VALUES ('"+username+"', '"+userpwd+"', '"+useremail+"', '"+namemd5+"');";
+			Connection conn = DBConnectionFactory.getConnection();
+			String sqlQuery = "INSERT INTO users(username, password, email, status, confirmed, namemd5)VALUES ('"+username+"', '"+userpwd+"', '"+useremail+"', '1', 'true','"+namemd5+"');";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			st.close();

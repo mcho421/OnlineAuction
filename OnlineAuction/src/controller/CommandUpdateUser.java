@@ -47,7 +47,7 @@ public class CommandUpdateUser implements Command {
 		user.setYearofbirth(yearofbirth);
 		user.setFulladdress(address);
 		user.setCreditcard(creditcard);		
-		if(!user.validte()){
+		if(!user.validate()){
 			System.out.println("invalid");
 			return page;
 		}
@@ -77,13 +77,13 @@ public class CommandUpdateUser implements Command {
 		}
 		try {
 			Connection conn = DBConnectionFactory.getConnection();
-			String sqlQuery = "UPDATE Users SET password=?, email=?,firstname=?, lastname=?, yearofbirth=?, fulladdress=?, creditcard=? WHERE username=?";
+			String sqlQuery = "UPDATE Users SET password=?, email=?,fname=?, lname=?, yearofbirth=?, fulladdress=?, creditcard=? WHERE username=?";
 			PreparedStatement st = conn.prepareStatement(sqlQuery);
 			st.setString(1, userpwd);
 			st.setString(2, useremail);
 			st.setString(3, fname);
 			st.setString(4, lname);
-			st.setInt(5, Integer.parseInt(yearofbirth));
+			st.setString(5, yearofbirth);
 			st.setString(6, address);
 			st.setString(7, creditcard);
 			st.setString(8, username);

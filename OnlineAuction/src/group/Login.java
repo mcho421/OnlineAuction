@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import java.sql.*;
 
+import jdbc.DBConnectionFactory;
+
 /**
  * Servlet implementation class Login
  */
@@ -47,17 +49,19 @@ public class Login extends HttpServlet {
 		
 		String msg = " ";
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			if(conn!=null){System.out.println("fuck!!");}
-			String sqlQuery = "select * from user_info where username =  '"+un+"' and userpwd = '"+pw+"'";
+			Connection conn = DBConnectionFactory.getConnection();
+			if(conn!=null)System.out.println("connected");
+			String sqlQuery = "select * from users where username =  '"+un+"' and password = '"+pw+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			if(rs.next()) {
-			String username = rs.getString(1);
-			String password = rs.getString(2);
-			if(un.equals(username)&&pw.equals(password)) {
+				System.out.println("got it");
+			    String username = rs.getString(2);
+			    System.out.println(username);
+			//String password = rs.getString(2);
+			//if(un.equals(username)&&pw.equals(password)) {
 				//msg = "hello" + un +"suc!";
+				System.out.println("got it 2");
 				HttpSession session = request.getSession();
 				session.setAttribute("username", username);
 				UserBean user = new UserBean();
@@ -65,7 +69,7 @@ public class Login extends HttpServlet {
 				request.setAttribute("UserBean",user);
 				rd =request.getRequestDispatcher("/UserIndex.jsp");
 				rd.forward(request, response);
-				}
+				//}
 			}
 				else {
 					msg = "invalid username or password!";

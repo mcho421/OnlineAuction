@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import jdbc.DBConnectionFactory;
+
 /**
  * Servlet implementation class Update
  */
@@ -61,16 +63,16 @@ public class Update extends HttpServlet {
 		user.setYearofbirth(yearofbirth);
 		user.setFulladdress(address);
 		user.setCreditcard(creditcard);		
-		if(!user.validte()){
+		if(!user.validate()){
 			System.out.println("invalid");
 			rd =request.getRequestDispatcher("/UserIndex.jsp");
 			rd.forward(request, response);
 			return;
 		}
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			String sqlQuery = "select * from user_info where useremail =  '"+useremail+"'";
+
+			Connection conn = DBConnectionFactory.getConnection();
+			String sqlQuery = "select * from users where email =  '"+useremail+"'";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			if(rs.next()){
@@ -94,9 +96,8 @@ public class Update extends HttpServlet {
 			e.printStackTrace();
 		}
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			String sqlQuery = "UPDATE user_info SET userpwd='"+userpwd+"', useremail='"+useremail+"',fname='"+fname+"', lname='"+lname+"', yearofbirth='"+yearofbirth+"', fulladdress='"+address+"', creditcard='"+creditcard+"'WHERE username='"+username+"';";
+			Connection conn = DBConnectionFactory.getConnection();
+			String sqlQuery = "UPDATE users SET password='"+userpwd+"', email='"+useremail+"',fname='"+fname+"', lname='"+lname+"', yearofbirth='"+yearofbirth+"', fulladdress='"+address+"', creditcard='"+creditcard+"'WHERE username='"+username+"';";
 			Statement st = conn.createStatement();
 			ResultSet rs = st.executeQuery(sqlQuery);
 			st.close();

@@ -25,7 +25,7 @@ public void setUseremail(String useremail) {
 	this.useremail = useremail;
 }
 private Hashtable<String, String> errors= new Hashtable<String, String>();
-public boolean validte() {
+public boolean validate() {
 boolean okAll = true;
 if (username.length()>10 || username.length()<6) {
 	errors.put("name", "The length of username must be between 6 and 10.");

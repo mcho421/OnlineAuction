@@ -19,7 +19,7 @@ scope="request" />
 Object username=session.getAttribute("username"); 
 %> 
 <script language="javascript">
-if(session.isNew()) {
+if(username==null) {
 	System.out.println("log in");
 	response.sendRedirect("\Login.jsp");
 	//RequestDispatcher rd = null;
@@ -73,8 +73,8 @@ function on_submit()
 <td><font size = '4' color =red>Hello, <%=username%></font></td>
 </tr>
 <tr>
-<td><input type="button" onclick="window.location.href='Register.jsp'" value ="Offer an item"></td>
-<td><input type="button" onclick="window.location.href='Register.jsp'" value ="items on auction"></td>
+<td><input type="button" onclick="window.location.href='OfferItem.jsp'" value ="Offer an item"></td>
+<td><input type="button" onclick="window.location.href='Login.jsp'" value ="items on auction"></td>
 <td><input type="button" onclick="window.location.href='Register.jsp'" value ="message"></td>
 <td><input type="button" onclick="window.location.href='Register.jsp'" value ="logout"></td>
 </tr>

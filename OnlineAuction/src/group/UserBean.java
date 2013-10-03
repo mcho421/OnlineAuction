@@ -10,6 +10,8 @@ import java.util.Hashtable;
 
 import jdbc.DBConnectionFactory;
 
+import jdbc.DBConnectionFactory;
+
 public class UserBean {
 	private int userid;
 	private String username = "";
@@ -105,8 +107,8 @@ public class UserBean {
 				conn = DBConnectionFactory.getConnection();
 				if(conn!=null) System.out.println("connected");
 				String sqlQuery = "SELECT username, password, email, status, "
-						+ "confirmed, namemd5, yearofbirth, firstname, "
-						+ "lastname, fulladdress, creditcard "
+						+ "confirmed, namemd5, yearofbirth, fname, "
+						+ "lname, fulladdress, creditcard "
 						+ "FROM Users where username = ?";
 				st = conn.prepareStatement(sqlQuery);
 				st.setString(1, Username);
@@ -141,7 +143,7 @@ public class UserBean {
 		}
 	}
 	private Hashtable<String, String> errors= new Hashtable<String, String>();
-	public boolean validte() {
+	public boolean validate() {
 		boolean okAll = true;
 		if (userpwd.length() > 10 ||userpwd.length() < 6) {
 		    errors.put("password","The length of password must be between 6 and 10");
@@ -172,7 +174,7 @@ public class UserBean {
 			errors.put("creditcard", "invalid credit card number.");
 			okAll = false;
 		}
-		if(!fulladdress.matches("[0-9a-zA-Z ,]+")){
+		if(!fulladdress.matches("[0-9a-zA-Z ,-]+")){
 			errors.put("address", "invalid address.");
 			okAll = false;			
 		}
