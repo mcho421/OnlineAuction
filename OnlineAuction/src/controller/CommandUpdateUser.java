@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.servlet.ServletException;
@@ -25,7 +26,7 @@ public class CommandUpdateUser implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+			HttpServletResponse response) throws ServletException, IOException, SQLException {
 
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
@@ -51,46 +52,18 @@ public class CommandUpdateUser implements Command {
 			System.out.println("invalid");
 			return page;
 		}
+		Connection conn = null;
 		try {
-			Connection conn = DBConnectionFactory.getConnection();
-			String sqlQuery = "select * from Users where email = ?";
-			PreparedStatement st = conn.prepareStatement(sqlQuery);
-			st.setString(1, useremail);
-			ResultSet rs = st.executeQuery();
-			if(rs.next()){
-				String un = rs.getString(2);
-				System.out.println(un);
-				System.out.println(username);
-				if(!un.equals(username)) {
-			    System.out.println("buxiangdeng");
-				user.setErrorMsg("email", "Sorry. This email address is already in use");
-				st.close();
-				rs.close();
-				System.out.println("invalid");
+			conn = DBConnectionFactory.getConnection();
+			boolean res = user.canUpdateEmail(conn, useremail);
+			if (res == false)
 				return page;
-				}
-			}
-			st.close();
-			rs.close();
+			user.updateDatabase(conn);
 		}catch  (Exception e) {
 			e.printStackTrace();
-		}
-		try {
-			Connection conn = DBConnectionFactory.getConnection();
-			String sqlQuery = "UPDATE Users SET password=?, email=?,fname=?, lname=?, yearofbirth=?, fulladdress=?, creditcard=? WHERE username=?";
-			PreparedStatement st = conn.prepareStatement(sqlQuery);
-			st.setString(1, userpwd);
-			st.setString(2, useremail);
-			st.setString(3, fname);
-			st.setString(4, lname);
-			st.setString(5, yearofbirth);
-			st.setString(6, address);
-			st.setString(7, creditcard);
-			st.setString(8, username);
-			st.executeUpdate();
-			st.close();
-		}catch  (Exception e) {
-			e.printStackTrace();
+		} finally {
+			if (conn != null)
+				conn.close();
 		}
 		return page;
 	}

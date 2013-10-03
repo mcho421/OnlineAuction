@@ -1,5 +1,7 @@
 package group;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,8 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
 
-import jdbc.DBConnectionFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import exceptions.ServiceLocatorException;
+import jdbc.DBConnectionFactory;
 import jdbc.DBConnectionFactory;
 
 public class UserBean {
@@ -189,4 +194,195 @@ public class UserBean {
 		Object message = (String)errors.get(err);
 		return (String) ((message == null) ? "" : message);
 		}
+	
+	public boolean canUpdateEmail(Connection conn, String useremail) throws SQLException {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			String sqlQuery = "select username from Users where email = ?";
+			st = conn.prepareStatement(sqlQuery);
+			st.setString(1, useremail);
+			rs = st.executeQuery();
+			if (rs.next()) {
+				String un = rs.getString(1);
+				System.out.println(un);
+				System.out.println(username);
+				if (!un.equals(username)) {
+					setErrorMsg("email", "Sorry. This email address is already in use");
+					System.out.println("invalid");
+					return false;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+		return true;
+	}
+		
+	public boolean isUnique(Connection conn, RegisterForm new_user) throws SQLException {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			// check for unique usernames
+			st = conn.prepareStatement("select * from Users where username = ?");
+			st.setString(1, username);
+			rs = st.executeQuery();
+			if(rs.next()){
+				new_user.setErrorMsg("name", "Sorry. This username is already in use");
+				System.out.println("invalid");
+				return false;
+			}
+			st.close();
+			rs.close();
+			
+			//check for unique emails
+			st = conn.prepareStatement("select * from Users where email = ?");
+			st.setString(1, useremail);
+			rs = st.executeQuery();
+			if(rs.next()){
+				new_user.setErrorMsg("email", "Sorry. This email address is already in use");
+				System.out.println("invalid");
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+		return true;
+	}
+	
+	public void calculateNameMd5() {
+		if (namemd5.equals("") || (namemd5 == null)) {
+			try {
+				Md5 md5 = new Md5();
+				namemd5 = md5.getMD5Str(username);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void insertDatabase(Connection conn) throws SQLException {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		calculateNameMd5();
+		try {
+			st = conn.prepareStatement("INSERT INTO Users (username, password, email, nameMd5, status, confirmed) VALUES (?, ?, ?, ?, '0', false);");
+			st.setString(1, username);
+			st.setString(2, userpwd);
+			st.setString(3, useremail);
+			st.setString(4, namemd5);
+			st.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+	}
+	
+	public void updateDatabase(Connection conn) throws SQLException {
+		PreparedStatement st = null;
+		calculateNameMd5();
+		try {
+			String sqlQuery = "UPDATE Users SET password=?, email=?,fname=?, lname=?, yearofbirth=?, fulladdress=?, creditcard=? WHERE username=?";
+			st = conn.prepareStatement(sqlQuery);
+			st.setString(1, userpwd);
+			st.setString(2, useremail);
+			st.setString(3, fname);
+			st.setString(4, lname);
+			st.setString(5, yearofbirth);
+			st.setString(6, fulladdress);
+			st.setString(7, creditcard);
+			st.setString(8, username);
+			st.executeUpdate();
+			st.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (st != null)
+				st.close();
+		}
+	}
+
+	public static boolean login(Connection conn, HttpServletRequest request, String un, String pw) throws SQLException {
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		try {
+			String sqlQuery = "select id, username from Users where username = ? and password = ?";
+			st = conn.prepareStatement(sqlQuery);
+			st.setString(1, un);
+			st.setString(2, pw);
+			rs = st.executeQuery();
+			if(rs.next()) {
+				int uid = rs.getInt(1);
+				String username = rs.getString(2);
+				HttpSession session = request.getSession();
+				session.setAttribute("username", username);
+				UserBean user = new UserBean();
+				user.Initialize(username);
+				request.setAttribute("UserBean",user);
+				System.out.println("SUCCESS");
+				return true;
+			} else {
+				request.setAttribute("msg", "invalid username or password!");
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+		return false;
+	}
+	
+	public static boolean confirmRegistration(Connection conn, HttpServletRequest request, String usermd5) throws SQLException {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			conn = DBConnectionFactory.getConnection();
+			st = conn.prepareStatement("select id from Users where namemd5 = ?");
+			st.setString(1, usermd5);
+			rs = st.executeQuery();
+			int uid = 0;
+			if(rs.next()){
+				uid = rs.getInt(1);
+			} else {
+				request.setAttribute("errorMsg", "Invalid confirmation string.");
+				return false;
+			}
+			st.close();
+			rs.close();
+			st = conn.prepareStatement("UPDATE Users SET confirmed=TRUE where id=?");
+			st.setInt(1, uid);
+			st.executeUpdate();
+		} catch (ServiceLocatorException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+		return true;
+	}
+	
 }

@@ -67,7 +67,13 @@ public class Controller extends HttpServlet {
 		Command command = commandMap.get(action);
 		String page = "/WEB-INF/error.jsp";
 		if (command != null) {
-			page = command.execute(request, response);
+			try {
+				page = command.execute(request, response);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				request.setAttribute("errorMsg", "Database error");
+				page = "/WEB-INF/error.jsp";
+			}
 		} else {
 			request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
 		}

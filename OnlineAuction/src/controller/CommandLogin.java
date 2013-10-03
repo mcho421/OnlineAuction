@@ -34,45 +34,24 @@ public class CommandLogin implements Command {
 		String un = request.getParameter("username");
 		String pw = request.getParameter("password");
 		
-		String msg = " ";
 		Connection conn = null;
-		ResultSet rs = null;
-		PreparedStatement st = null;
 		try {
+			conn = DBConnectionFactory.getConnection();
+			boolean loginResult = UserBean.login(conn, request, un, pw);
+			if (loginResult == true)
+				return success;
+			else
+				return invalid;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				conn = DBConnectionFactory.getConnection();
-				String sqlQuery = "select id, username from Users where username = ? and password = ?";
-				st = conn.prepareStatement(sqlQuery);
-				st.setString(1, un);
-				st.setString(2, pw);
-				rs = st.executeQuery();
-				if(rs.next()) {
-					int uid = rs.getInt(1);
-					String username = rs.getString(2);
-					HttpSession session = request.getSession();
-					session.setAttribute("username", username);
-					UserBean user = new UserBean();
-					user.Initialize(username);
-					request.setAttribute("UserBean",user);
-					System.out.println("SUCCESS");
-					return success;
-				} else {
-					msg = "invalid username or password!";
-					request.setAttribute("msg", msg);
-					return invalid;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (st != null)
-					st.close();
-				if (rs != null)
-					rs.close();
 				if (conn != null)
-					conn.close();
-			}
-		} catch (SQLException e) {
+				conn.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
+			}
 		}
 
 		return invalid;
