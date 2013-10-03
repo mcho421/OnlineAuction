@@ -57,15 +57,16 @@ public class Upload extends HttpServlet {
 		  String username = (String) session.getAttribute("username");
 		  Item newitem = (Item) session.getAttribute("Item");
 		  //if(request.getAttribute("Item")!=null) newitem = (Item) request.getAttribute("Item");
-		  String path = request.getParameter("path");
-		  String tmpPath = path+"image";
-		  String picture = "";
-		  tempdir = new File(tmpPath);
-	      if(!tempdir.isDirectory())
-	          tempdir.mkdir();		  
+//		  String path = request.getParameter("path");
+//		  String tmpPath = path+"image";
+		  File baseDir = new File(getServletContext().getRealPath("/"));
+		  File imgDir = new File(baseDir, "image");
+//		  String picture = "";
+	      if(!imgDir.isDirectory())
+	          imgDir.mkdir();		  
 			if(ServletFileUpload.isMultipartContent(request)){
 			   DiskFileItemFactory factory = new DiskFileItemFactory();
-			   factory.setRepository(new File(path+"image\\"));
+			   factory.setRepository(imgDir);
 			   ServletFileUpload upload = new ServletFileUpload(factory); 
 			   upload.setSizeMax(1*1024*1024);
 			   List items = new ArrayList();
@@ -79,14 +80,15 @@ public class Upload extends HttpServlet {
 			    FileItem fileItem = (FileItem) it.next();
 			    if(!fileItem.isFormField()){   
 			     if(fileItem.getName()!=null && fileItem.getSize()!=0){
-			      File fullFile = new File(fileItem.getName());
-			      File newFile = new File(path+"image\\" + username+fullFile.getName());
-			      picture=path+"image\\" + username+fullFile.getName();
-			      System.out.println(picture);
+//			      File fullFile = new File(fileItem.getName());
+//			      File newFile = new File(path+"image\\" + username+fullFile.getName());
+			      File newFile = new File(imgDir, username+"-"+fileItem.getName());
+//			      picture=path+"image\\" + username+fullFile.getName();
+			      System.out.println(newFile.getName());
 			      try {
 			        fileItem.write(newFile);
 			        System.out.println("cunshangle");
-					newitem.setImageurl(picture);
+					newitem.setImageurl(newFile.getName());
 					newitem.Insert(username);
 					request.setAttribute("Item", newitem);
 					UserBean user = new UserBean();

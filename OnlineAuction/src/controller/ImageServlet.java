@@ -36,7 +36,11 @@ public class ImageServlet extends HttpServlet {
 		BufferedOutputStream output = null;
 		try {
 			String fileName = request.getParameter("image");             
-			FileInputStream fis = new FileInputStream(new File(fileName));
+			File baseDir = new File(getServletContext().getRealPath("/"));
+			File imgDir = new File(baseDir, "image");
+			File imgFile = new File(imgDir, fileName);
+
+			FileInputStream fis = new FileInputStream(imgFile);
 			bis = new BufferedInputStream(fis);             
 			response.setContentType(URLConnection.guessContentTypeFromName(fileName));
 			output = new BufferedOutputStream(response.getOutputStream());
