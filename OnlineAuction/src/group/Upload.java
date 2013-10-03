@@ -55,7 +55,8 @@ public class Upload extends HttpServlet {
 		  RequestDispatcher rd = null;
 		  HttpSession session = request.getSession();
 		  String username = (String) session.getAttribute("username");
-		  Item newitem = (Item) request.getAttribute("Item");
+		  Item newitem = (Item) session.getAttribute("Item");
+		  //if(request.getAttribute("Item")!=null) newitem = (Item) request.getAttribute("Item");
 		  String path = request.getParameter("path");
 		  String tmpPath = path+"image";
 		  String picture = "";
@@ -88,6 +89,9 @@ public class Upload extends HttpServlet {
 					newitem.setImageurl(picture);
 					newitem.Insert(username);
 					request.setAttribute("Item", newitem);
+					UserBean user = new UserBean();
+					user.Initialize(username);
+					request.setAttribute("UserBean", user);
 					rd=request.getRequestDispatcher("/UserIndex.jsp");
 					rd.forward(request, response);
 			      } catch (Exception e) {

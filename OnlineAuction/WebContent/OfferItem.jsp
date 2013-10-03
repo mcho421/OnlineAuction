@@ -27,13 +27,12 @@ String path = getServletContext().getRealPath("/");
 </tr>
 <tr>
 <td>Category</td>
-<td><select id="category" style="width:300px;height:20px;">
-  <option value="1">option 1</option>
-  <option value="2">option 2</option>
-  <option value="3">option 3</option>
-  <option value="4">option 4</option>
-  <option value="5">option 5</option>
-  <option value="6">option 6</option>
+<td><select name="category" style="width:300px;height:20px;">
+  <option value="1" selected>Antiques</option>
+  <option value="2">Books</option>
+  <option value="3">Clothing</option>
+  <option value="4">Electronics</option>
+  <option value="5">Other</option>
 </select></td>
 </tr>
 <tr>
@@ -48,23 +47,26 @@ String path = getServletContext().getRealPath("/");
 </tr>
 <tr>
 <td>Reserve Price</td>
-<td><input type = "text" style="width:500px;height:20px;"name = "rprice"value = "<%=Item.getRprice() %>"/></td>
+<td><input type = "text" style="width:500px;height:20px;"name = "rprice"value = "${Item.getRprice()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("rprice") %></font></td>
 </tr>
 <tr>
 <td>Bidding Start Price</td>
-<td><input type = "text" style="width:500px;height:20px;"name = "sprice"value = "<%=Item.getSprice() %>"/></td>
+<td><input type = "text" style="width:500px;height:20px;"name = "sprice"value = "${Item.getSprice()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("sprice") %></font></td>
 </tr>
 <tr>
 <td>Bidding Increments</td>
-<td><input type = "text"style="width:500px;height:20px;" name = "bincre"value = "<%=Item.getBincre() %>"/></td>
+<td><input type = "text"style="width:500px;height:20px;" name = "bincre"value = "${ tem.getBincre()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("iprice") %></font></td>
 </tr>
 <tr>
 <td>Closing Time</td>
-<td><input type = "text" style="width:500px;height:20px;"name = "ctime"value = "<%=Item.getCtime() %>"/></td>
-<td><font color =red><%=Item.getErrorMsg("time") %></font></td>
+<td><select name="closingtime" style="width:300px;height:20px;">
+  <option value="1" selected>1 hour later</option>
+  <option value="2">2 hour later</option>
+  <option value="3">3 hour later</option>
+</select></td>
 </tr>
 <tr>
 <td><input type = "submit" value = "Upload Picture"/></td>
