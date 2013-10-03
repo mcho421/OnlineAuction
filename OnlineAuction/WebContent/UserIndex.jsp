@@ -15,6 +15,7 @@ scope="request" />
 <title>Index</title>
 </head>
 <body>
+<%@ include file="/WEB-INF/header.jsp" %>
 <% 
 Object username=session.getAttribute("username"); 
 %> 

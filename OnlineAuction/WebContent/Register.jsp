@@ -40,6 +40,7 @@ function on_submit()
 <title>Sign Up</title>
 </head>
 <body>
+<%@ include file="/WEB-INF/header.jsp" %>
 <form name="form1" method="post" action="controller" onSubmit="return on_submit()">
 <input type="hidden" name="action" value="register"/>
 <table>

@@ -7,7 +7,7 @@
 <title>Sign In</title>
 </head>
 <body>
-
+<%@ include file="/WEB-INF/header.jsp" %>
 <form name="loginform" action="controller" method = "post">
 <input type="hidden" name="action" value="login"/>
 <table>
