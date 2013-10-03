@@ -106,6 +106,36 @@ public void setCurrentBiddingPrice(int currentBiddingPrice) {
 public int getCurrentBiddingPrice() {
 	return currentBiddingPrice;
 }
+public int getMinimumBid() {
+	return getCurrentBiddingPrice() + getBincre();
+}
+public String getTimeLeft() {
+    Timestamp now = new Timestamp(System.currentTimeMillis());
+	long milliseconds1 = now.getTime();
+    long milliseconds2 = getCtime().getTime();
+    
+    if (milliseconds1 > milliseconds2) {
+    	return "Ended";
+    }
+	
+	long diff = milliseconds2 - milliseconds1;
+	long diffSeconds = diff / 1000;
+	long diffMinutes = diff / (60 * 1000);
+	long diffHours = diff / (60 * 60 * 1000);
+	long diffDays = diff / (24 * 60 * 60 * 1000);
+	
+	if (diffDays != 0) {
+		return diffDays + " day(s)";
+	} else if (diffHours != 0) {
+		return diffHours + " hour(s)";
+	} else if (diffMinutes != 0) {
+		return diffMinutes + " minute(s)";
+	} else if (diffSeconds != 0) {
+		return diffSeconds + " second(s)";
+	}
+
+	return "Unknown";
+}
 public void Initialize(String Title) {
 
 	try {
@@ -135,6 +165,30 @@ public void Initialize(String Title) {
 	}catch  (Exception e) {
 		e.printStackTrace();
 	}
+}
+public static Item initializeFromId(Connection conn, int id) throws SQLException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	Item item = new Item();
+	try {
+		String sqlQuery = "SELECT * FROM Items WHERE id = ?";
+		st = conn.prepareStatement(sqlQuery);
+		st.setInt(1, id);
+		rs = st.executeQuery();
+		if (rs.next()){
+			item = makeItem(rs);
+		} else {
+			System.out.println("Item id "+id+" not found.");
+			throw new SQLException();
+		}
+		Item.updateCurrentBid(conn, item);
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+	return item;
 }
 public void Insert(String username) {
 
@@ -174,6 +228,31 @@ public void Insert(String username) {
 	
 }
 
+public static void updateCurrentBid(Connection conn, Item i) throws SQLException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	try {
+		String sqlQuery = "select max(bid) from Bids where item = ? group by item";
+		st = conn.prepareStatement(sqlQuery);
+		st.setInt(1, i.getId());
+		rs = st.executeQuery();
+		if (rs.next()) {
+			System.out.println("has bidder");
+			i.setCurrentBiddingPrice(rs.getInt(1));
+		} else {
+			System.out.println("no bidder");
+			i.setCurrentBiddingPrice(i.getSprice());
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+}
+
 private static Item makeItem(ResultSet rs) throws SQLException {
 	Item item = new Item();
 	item.setId(rs.getInt(1));
@@ -208,18 +287,9 @@ public static List<Item> search(Connection conn, String searchItem, int category
 		}
 		st.close();
 		rs.close();
+
 		for (Item i : result) {
-			sqlQuery = "select max(bid) from Bids where item = ? group by item";
-			st = conn.prepareStatement(sqlQuery);
-			st.setInt(1, i.getId());
-			rs = st.executeQuery();
-			if (rs.next()) {
-				System.out.println("has bidder");
-				i.setCurrentBiddingPrice(rs.getInt(1));
-			} else {
-				System.out.println("no bidder");
-				i.setCurrentBiddingPrice(i.getSprice());
-			}
+			Item.updateCurrentBid(conn, i);
 		}
 	} catch (Exception e) {
 		e.printStackTrace();

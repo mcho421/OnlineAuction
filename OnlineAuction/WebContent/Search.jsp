@@ -31,7 +31,7 @@
 			</td>
 			<td width="30%"><a href="controller?action=itemPage&item=${r.id}"><b>${r.title}</b></a><br>${r.description}</td>
 			<td width="20%">$ ${r.currentBiddingPrice}</td>
-			<td width="20%" >${r.ctime}</td>
+			<td width="20%" >${r.timeLeft}</td>
 		</tr>
 	</c:forEach>
 </table>

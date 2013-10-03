@@ -50,6 +50,7 @@ public class Controller extends HttpServlet {
         commandMap.put("updateUser", new CommandUpdateUser());
         commandMap.put("userIndexPage", new CommandUserIndexPage());
         commandMap.put("search", new CommandSearch());
+        commandMap.put("itemPage", new CommandItemPage());
     }
 
 	/**
