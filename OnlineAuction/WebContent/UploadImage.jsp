@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:useBean id="Item" class="group.Item"
-scope="request" />
+scope="session" />
 <jsp:setProperty property="*" name="Item" />
 <% 
 Object username=session.getAttribute("username"); 
@@ -20,35 +20,35 @@ System.out.println(path);
 <tr><td><font size = '4' color =red>Hello, <%=username%></font></td></tr>
 <tr>
 <td>Title</td>
-<td><%=Item.getTitle()%></td>
+<td>${Item.getTitle()}</td>
 </tr>
 <tr>
 <td>Category</td>
-<td><%=Item.getCategory()%></td>
+<td>${Item.getCategory()}</td>
 </tr>
 <tr>
 <td>Descrpition</td>
-<td ><%=Item.getDescription() %></td>
+<td >${Item.getDescription()}</td>
 </tr>
 <tr>
 <td>Postage Details</td>
-<td><%=Item.getPostage() %></td>
+<td>${Item.getPostage()}</td>
 </tr>
 <tr>
 <td>Reserve Price</td>
-<td><%=Item.getRprice() %></td>
+<td>${Item.getRprice()}</td>
 </tr>
 <tr>
 <td>Bidding Start Price</td>
-<td><%=Item.getSprice() %></td>
+<td>${Item.getSprice()}</td>
 </tr>
 <tr>
 <td>Bidding Increments</td>
-<td><%=Item.getBincre() %></td>
+<td>${Item.getBincre()}</td>
 </tr>
 <tr>
 <td>Closing Time</td>
-<td><%=Item.getCtime() %></td>
+<td>${Item.getCtime()}</td>
 </tr>
 </table>
 <form name="upform" action = "upload?path=<%=path%>" method ="post" enctype = "multipart/form-data">
