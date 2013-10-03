@@ -16,6 +16,7 @@ System.out.println(path);
 <title>Upload Picture</title>
 </head>
 <body>
+<%@ include file="/WEB-INF/header.jsp" %>
 <table>
 <tr><td><font size = '4' color =red>Hello, <%=username%></font></td></tr>
 <tr>

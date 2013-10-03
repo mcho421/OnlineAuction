@@ -7,6 +7,7 @@
 <title>Registration</title>
 </head>
 <body>
+<%@ include file="/WEB-INF/header.jsp" %>
 <center><%=request.getAttribute("msg")%><br />
 <br/>
 <a href="controller">Index</a></center>

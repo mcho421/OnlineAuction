@@ -7,6 +7,7 @@
 <title>Online Auction</title>
 </head>
 <body>
+<%@ include file="/WEB-INF/header.jsp" %>
 <h1> An Error Occurred! </h1>
 ${errorMsg}
 <h2> Return to the home page ? </h2>

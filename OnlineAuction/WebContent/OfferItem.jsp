@@ -15,6 +15,7 @@ String path = getServletContext().getRealPath("/");
 </head>
 
 <body>
+<%@ include file="/WEB-INF/header.jsp" %>
 <form name ="offeritem" method = "post" action = "controller" >
 <input type="hidden" name="action" value="offeritem"/>
 <table>
