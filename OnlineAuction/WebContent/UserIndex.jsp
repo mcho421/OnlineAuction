@@ -79,7 +79,8 @@ function on_submit()
 <td><input type="button" onclick="window.location.href='Register.jsp'" value ="logout"></td>
 </tr>
 </table>
-<form name="updateform" method="post" action="update" onSubmit="return on_submit()">
+<form name="updateform" method="post" action="controller" onSubmit="return on_submit()">
+<input type="hidden" name="action" value="updateUser"/>
 <table>
 <tr>
 <td>Username</td>

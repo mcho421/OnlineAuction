@@ -2,9 +2,13 @@ package group;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
+
+import jdbc.DBConnectionFactory;
 
 public class UserBean {
 	private int userid;
@@ -16,6 +20,9 @@ public class UserBean {
 	private String yearofbirth = "";
 	private String fulladdress = "";
 	private String creditcard = "";
+	private int status = 0;
+	private boolean confirmed = false;
+	private String namemd5 = "";
 	public int getUserid() {
 		return userid;
 	}
@@ -70,34 +77,67 @@ public class UserBean {
 	public void setCreditcard(String creditcard) {
 		this.creditcard = creditcard;
 	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public boolean getConfirmed() {
+		return confirmed;
+	}
+	public void setConfirmed(boolean confirmed) {
+		this.confirmed = confirmed;
+	}
+	public String getNameMd5() {
+		return namemd5;
+	}
+	public void setNameMd5(String namemd5) {
+		this.namemd5 = namemd5;
+	}
 	public void Initialize(String Username) {
 
+		Connection conn = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
 		try {
-			DBconn newdb = new DBconn();
-			Connection conn = newdb.getConn();
-			if(conn!=null) System.out.println("connected");
-			String sqlQuery = "SELECT username, userpwd, useremail,fname, lname, yearofbirth, fulladdress, creditcard FROM user_info where username =  '"+Username+"'";
-			Statement st = conn.createStatement();
-			ResultSet rs = st.executeQuery(sqlQuery);
-			if(rs.next()){
-            username = rs.getString(1);
-            userpwd = rs.getString(2);
-            useremail = rs.getString(3);
-            yearofbirth = rs.getString(6);
-            if(yearofbirth==null) yearofbirth = "";
-            fname = rs.getString(4);
-            if(fname==null) fname = "";
-            lname = rs.getString(5);
-            if(lname==null) lname = "";
-            fulladdress = rs.getString(7);
-            if(fulladdress==null) fulladdress = "";
-            creditcard = rs.getString(8); 
-            if(creditcard==null) creditcard = "";
+			try {
+				conn = DBConnectionFactory.getConnection();
+				if(conn!=null) System.out.println("connected");
+				String sqlQuery = "SELECT username, password, email, status, "
+						+ "confirmed, namemd5, yearofbirth, firstname, "
+						+ "lastname, fulladdress, creditcard "
+						+ "FROM Users where username = ?";
+				st = conn.prepareStatement(sqlQuery);
+				st.setString(1, Username);
+				rs = st.executeQuery();
+				if(rs.next()){
+		            username = rs.getString(1);
+		            userpwd = rs.getString(2);
+		            useremail = rs.getString(3);
+		            status = rs.getInt(4);
+		            confirmed = rs.getBoolean(5);
+		            namemd5 = rs.getString(6);
+		            yearofbirth = rs.getString(7);
+		            if(yearofbirth==null) yearofbirth = "";
+		            fname = rs.getString(8);
+		            if(fname==null) fname = "";
+		            lname = rs.getString(9);
+		            if(lname==null) lname = "";
+		            fulladdress = rs.getString(10);
+		            if(fulladdress==null) fulladdress = "";
+		            creditcard = rs.getString(11); 
+		            if(creditcard==null) creditcard = "";
+				}
+			}catch  (Exception e) {
+				e.printStackTrace();
+			} finally {
+				st.close();
+				rs.close();
+				conn.close();
 			}
-			st.close();
-			rs.close();
-		}catch  (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+				e.printStackTrace();
 		}
 	}
 	private Hashtable<String, String> errors= new Hashtable<String, String>();

@@ -6,6 +6,11 @@ CREATE TABLE Users (
     status INTEGER NOT NULL,
     confirmed BOOLEAN NOT NULL,
     nameMd5 TEXT NOT NULL,
+    yearOfBirth INTEGER,
+    firstName TEXT,
+    lastName TEXT,
+    fullAddress TEXT,
+    creditCard TEXT,
     PRIMARY KEY (id)
 );
 

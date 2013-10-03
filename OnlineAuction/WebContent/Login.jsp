@@ -8,7 +8,8 @@
 </head>
 <body>
 
-<form name="loginform" action="login" method = "post">
+<form name="loginform" action="controller" method = "post">
+<input type="hidden" name="action" value="login"/>
 <table>
 <tr>
 <td>Enter User Name:</td><td> <input type = "text" name="username"></td>
@@ -16,10 +17,10 @@
 <tr>
 <td>Enter Password:</td><td> <input name="password" type="password"></td>
 </tr>
-<tr><td><font color =red><%=request.getAttribute("msg")%></font></td></tr>
+<tr><td><font color =red>${msg}</font></td></tr>
 <tr>
 <td><input type="submit" value ="Sign In"></td>
-<td><input type="button" onclick="window.location.href='Register.jsp'" value ="Sign Up Now"></td>
+<td><input type="button" onclick="window.location.href='controller?action=registerPage'" value ="Sign Up Now"></td>
 </tr>
 </table>
 </form>
