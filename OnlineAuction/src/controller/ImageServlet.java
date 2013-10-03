@@ -36,6 +36,9 @@ public class ImageServlet extends HttpServlet {
 		BufferedOutputStream output = null;
 		try {
 			String fileName = request.getParameter("image");             
+			if (fileName.indexOf("/") > -1 || fileName.indexOf("\\") > -1) {
+				throw new RuntimeException();
+			}
 			File baseDir = new File(getServletContext().getRealPath("/"));
 			File imgDir = new File(baseDir, "image");
 			File imgFile = new File(imgDir, fileName);
@@ -50,6 +53,8 @@ public class ImageServlet extends HttpServlet {
 		} catch(IOException e){
 //			e.printStackTrace();
 			System.out.println("file not found");
+		} catch(RuntimeException e){
+			System.out.println("no dodgy stuff please");
 		}finally{
 			if (output != null) 
 				output.close();
