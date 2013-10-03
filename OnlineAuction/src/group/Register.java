@@ -1,5 +1,7 @@
 package group;
 
+// this class is obsolete, do not use. use CommandRegister instead
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -44,7 +46,7 @@ public class Register extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("txtUname");
+/*		String username = request.getParameter("txtUname");
 		String userpwd = request.getParameter("txtUpwd");
 		String useremail = request.getParameter("txtUemail");
 		RequestDispatcher rd = null;		
@@ -121,18 +123,18 @@ public class Register extends HttpServlet {
 		}catch  (Exception e) {
 			e.printStackTrace();
 		}
-		/*EmailCfm ec = new EmailCfm();
+		EmailCfm ec = new EmailCfm();
 		try {
 			ec.sendVerify(useremail, namemd5);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			System.out.println("unsuc email sent");
 			e.printStackTrace();
-		}*/
+		}
 		String msg = "Please login your email account and click the provided URL to confirm registration";
 	    request.setAttribute("msg", msg);
 		rd =request.getRequestDispatcher("/Regsuc.jsp");
-		rd.forward(request, response);
+		rd.forward(request, response);*/
 	}
 
 }

@@ -15,6 +15,12 @@ select id, category from Categories
 </head>
 <body>
 <a href="controller?action=loginPage">Login</a> | <a href="controller?action=registerPage">Register</a>
+<c:if test="${username != null}">
+	Logged in as <a href="controller?action=userIndexPage">${username}</a>
+</c:if>
+<c:if test="${username == null}">
+	Not logged in
+</c:if>
 <h1>Welcome to the Auction Site!</h1>
 Search:
 <form name="search" action="controller" method="GET">

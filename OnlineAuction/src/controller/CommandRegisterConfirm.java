@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import exceptions.ServiceLocatorException;
+import group.UserBean;
 import jdbc.DBConnectionFactory;
 
 public class CommandRegisterConfirm implements Command {
@@ -33,35 +34,17 @@ public class CommandRegisterConfirm implements Command {
 		}
 
 		Connection conn = null;
-		PreparedStatement st = null;
-		ResultSet rs = null;
 		try {
 			try {
 				conn = DBConnectionFactory.getConnection();
-				st = conn.prepareStatement("select id from Users where namemd5 = ?");
-				st.setString(1, usermd5);
-				rs = st.executeQuery();
-				int uid = 0;
-				if(rs.next()){
-					uid = rs.getInt(1);
-				} else {
-					request.setAttribute("errorMsg", "Invalid confirmation string.");
+				boolean res = UserBean.confirmRegistration(conn, request, usermd5);
+				if (res == false)
 					return errorPage;
-				}
-				st.close();
-				rs.close();
-				st = conn.prepareStatement("UPDATE Users SET confirmed=TRUE where id=?");
-				st.setInt(1, uid);
-				st.executeUpdate();
 			} catch (ServiceLocatorException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
-				if (st != null)
-					st.close();
-				if (rs != null)
-					rs.close();
 				if (conn != null)
 					conn.close();
 			}
