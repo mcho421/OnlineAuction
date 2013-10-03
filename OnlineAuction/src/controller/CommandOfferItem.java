@@ -41,9 +41,12 @@ public class CommandOfferItem implements Command {
 		newitem.setImageurl(request.getParameter("picture"));
 		newitem.setDescription(request.getParameter("description"));
 		newitem.setPostage(request.getParameter("postage"));
-		newitem.setRprice(Integer.parseInt(request.getParameter("rprice")));
-		newitem.setSprice(Integer.parseInt(request.getParameter("sprice")));
-		newitem.setBincre(Integer.parseInt(request.getParameter("bincre")));
+		String rprice = request.getParameter("rprice");
+		String sprice = request.getParameter("sprice");
+		String bprice = request.getParameter("rprice");
+		newitem.setRprice(Integer.parseInt(rprice));
+		newitem.setSprice(Integer.parseInt(sprice));
+		newitem.setBincre(Integer.parseInt(bprice));
 		int ctime = Integer.parseInt(request.getParameter("closingtime"));
 		if(ctime == 1){
 			long retryDate = System.currentTimeMillis();
@@ -89,31 +92,5 @@ public class CommandOfferItem implements Command {
 		return invalid;
 		}
 	}
-		//System.out.println("in service method");
-		//String un = request.getParameter("username");
-		//String pw = request.getParameter("password");		
-		//Connection conn = null;
-		//try {
-			//conn = DBConnectionFactory.getConnection();
-			//boolean loginResult = UserBean.login(conn, request, un, pw);
-			//if (loginResult == true)
-				//return success;
-			//else
-				//return invalid;
-
-		//} catch (Exception e) {
-	/*		e.printStackTrace();
-		} finally {
-			try {
-				if (conn != null)
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return invalid;
-	}*/
-
 
 }

@@ -73,6 +73,7 @@ public class Upload extends HttpServlet {
 			     items = upload.parseRequest(request);
 			    } catch (FileUploadException e) {
 			     System.out.println(e.getMessage());
+			     newitem.setErrorMsg("picture", e.getMessage());
 			    }
 			   Iterator it = items.iterator();
 			   while(it.hasNext()){

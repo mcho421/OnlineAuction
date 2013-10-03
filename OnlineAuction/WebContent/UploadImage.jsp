@@ -52,8 +52,9 @@ System.out.println(path);
 <td>${Item.getCtime()}</td>
 </tr>
 </table>
-<form name="upform" action = "cotroller" method ="post" enctype = "multipart/form-data">
+<form name="upform" action = "upload" method ="post" enctype = "multipart/form-data">
 <input type="hidden" name="action" value="uploadimage"/>
+<input type="hidden" name="path" value="<%=path %>"/>
 
 <table>
 <tr>
