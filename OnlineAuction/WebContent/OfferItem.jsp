@@ -15,7 +15,8 @@ String path = getServletContext().getRealPath("/");
 </head>
 
 <body>
-<form name ="offeritem" method = "post" action = "offeritem?user = <%=username%>" >
+<form name ="offeritem" method = "post" action = "controller" >
+<input type="hidden" name="action" value="offeritem"/>
 <table>
 <tr>
 <td><font size = '4' color =red>Hello, <%=username%></font></td>
