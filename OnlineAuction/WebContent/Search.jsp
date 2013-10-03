@@ -18,7 +18,7 @@
 		<th width="30%">Image</th>
 		<th width="30%">Item</th>
 		<th width="20%">Current Bidding Price</th>
-		<th width="20%">Closing time</td>
+		<th width="20%">Closing time</th>
 	</tr>
 	<c:forEach var="r" items="${result}">
 		<tr>

@@ -34,8 +34,9 @@ public class ImageServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedInputStream bis = null;
 		BufferedOutputStream output = null;
+		String fileName = request.getParameter("image"); 
 		try {
-			String fileName = request.getParameter("image");             
+			//fileName = request.getParameter("image");             
 			if (fileName.indexOf("/") > -1 || fileName.indexOf("\\") > -1) {
 				throw new RuntimeException();
 			}
@@ -53,6 +54,10 @@ public class ImageServlet extends HttpServlet {
 		} catch(IOException e){
 //			e.printStackTrace();
 			System.out.println("file not found");
+			String s = getServletContext().getRealPath("/");
+			System.out.println(s);
+			System.out.println(fileName);
+			
 		} catch(RuntimeException e){
 			System.out.println("no dodgy stuff please");
 		}finally{

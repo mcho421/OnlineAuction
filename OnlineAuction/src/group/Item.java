@@ -197,7 +197,8 @@ public static List<Item> search(Connection conn, String searchItem, int category
 	try {
 		String sqlQuery = "select * from Items where title ILIKE ?";
 		if (category != 0)
-			sqlQuery = "select * from Items where title ILIKE ? AND category = ?";
+			sqlQuery = "select * from Items where title ILIKE ? AND category = ? AND closingtime > CURRENT_TIMESTAMP";
+		//doesnt work?
 		st = conn.prepareStatement(sqlQuery);
 		st.setString(1, "%" + searchItem + "%");
 		if (category != 0)
@@ -273,6 +274,21 @@ public boolean validate() {
 		okAll = false;
 	}
 	return okAll;
+}
+public static boolean HaltItem(Connection conn, int id) {
+	PreparedStatement st = null;
+	try{
+		conn = DBConnectionFactory.getConnection();
+		st = conn.prepareStatement("UPDATE items SET closingtime = CURRENT_TIMESTAMP where id = ?");
+		st.setInt(1, id);
+        st.executeUpdate();
+		st.close();
+		return true;
+		} catch (Exception e) {
+		e.printStackTrace();
+		return false;
+	} 
+
 }
 public void setErrorMsg(String err,String errMsg) {
 	if (err != null && errMsg !=null) {

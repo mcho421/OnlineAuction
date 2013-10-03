@@ -412,5 +412,58 @@ public class UserBean {
 		}
 		return true;
 	}
+	public static int getstatus(Connection conn, String username, HttpServletRequest request){
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		int s = 0;
+		try{
+			conn = DBConnectionFactory.getConnection();
+			st = conn.prepareStatement("select status from Users where username = ?");
+			st.setString(1, username);
+			rs = st.executeQuery();
+			if(rs.next()){
+			s = rs.getInt(1);
+			}
+			st.close();
+			rs.close();
+			} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return s;
+	}
+	public static boolean BanUser(Connection conn, int id) {
+		PreparedStatement st = null;
+		try{
+			conn = DBConnectionFactory.getConnection();
+			st = conn.prepareStatement("UPDATE users SET status = '1' where id = ?");
+			st.setInt(1, id);
+	        st.executeUpdate();
+			st.close();
+			return true;
+			} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} 
+
+	}
+	public static boolean getconfirmation(Connection conn,String username) {
+		boolean confirmed = false;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try{
+			conn = DBConnectionFactory.getConnection();
+			st = conn.prepareStatement("select confirmed from Users where username = ?");
+			st.setString(1, username);
+			rs = st.executeQuery();
+			if(rs.next()){
+			confirmed = rs.getBoolean(1);
+			}
+			st.close();
+			rs.close();
+			} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return confirmed;
+	}
 	
 }
