@@ -85,13 +85,8 @@ public class Upload extends HttpServlet {
 			      //File fullFile = new File(fileItem.getName());
 			      long time = System.currentTimeMillis();
 			      String uploadtime = String.valueOf(time);
-			      //File newFile = new File(path+"image\\" + username+uploadtime+fullFile.getName());
-			      //picture=path+"image\\" + username+uploadtime+fullFile.getName();
-			      //System.out.println(picture);
-
-//			      File fullFile = new File(fileItem.getName());
-//			      File newFile = new File(path+"image\\" + username+fullFile.getName());
 			      File newFile = new File(imgDir, username+uploadtime+"-"+fileItem.getName());
+			      //to avoid user upload a same file mutiple times, add the upload time into new file name.
 //			      picture=path+"image\\" + username+fullFile.getName();
 			      System.out.println(newFile.getName());
 			      try {

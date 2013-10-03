@@ -44,7 +44,7 @@ function chk(lbl){
 </tr>
 <tr>
 <td>Title</td>
-<td><input type = "text" MaxLength ='10' style="width:500px;height:20px;" name = "title" value ="<%=Item.getTitle()%>" /></td>
+<td><input type = "text" style="width:500px;height:20px;" name = "title" value ="<%=Item.getTitle()%>" /></td>
 <td><font color =red><%=Item.getErrorMsg("title") %></font></td>
 </tr>
 <tr>
@@ -59,7 +59,7 @@ function chk(lbl){
 </tr>
 <tr>
 <td>Descrpition</td>
-<td ><input MaxLength ='100' style="width:500px;height:200px;" type = "text" name = "description"value="<%=Item.getDescription() %>" /></td>
+<td ><input style="width:500px;height:200px;" type = "text" name = "description"value="<%=Item.getDescription() %>" /></td>
 <td><font color =red><%=Item.getErrorMsg("descrption") %></font></td>
 </tr>
 <tr>
@@ -79,7 +79,7 @@ function chk(lbl){
 </tr>
 <tr>
 <td>Bidding Increments</td>
-<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "bincre"value = "${ tem.getBincre()}"/></td>
+<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "bincre"value = "${Item.getBincre()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("bprice") %></font></td>
 </tr>
 <tr>
