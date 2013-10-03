@@ -6,12 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import exceptions.ServiceLocatorException;
 import jdbc.DBConnectionFactory;
 public class Item {
 private String title="";
+private int id = 0;
+private String pictureName="";
+private String picturePath="";
 private int category;
 private String imageurl="";
 private String description="";
@@ -19,8 +24,28 @@ private String postage="";
 private int rprice;
 private int sprice;
 private int bincre;
+private int currentBiddingPrice;
 private Timestamp ctime = new Timestamp(System.currentTimeMillis());
 private int seller;
+
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public String getPictureName() {
+	return pictureName;
+}
+public void setPictureName(String pictureName) {
+	this.pictureName = pictureName;
+}
+public String getPicturePath() {
+	return picturePath;
+}
+public void setPicturePath(String picturePath) {
+	this.picturePath = picturePath;
+}
 public String getTitle() {
 	return title;
 }
@@ -74,6 +99,12 @@ public Timestamp getCtime() {
 }
 public void setCtime(Timestamp ctime) {
 	this.ctime = ctime;
+}
+public void setCurrentBiddingPrice(int currentBiddingPrice) {
+	this.currentBiddingPrice = currentBiddingPrice;
+}
+public int getCurrentBiddingPrice() {
+	return currentBiddingPrice;
 }
 public void Initialize(String Title) {
 
@@ -141,6 +172,60 @@ public void Insert(String username) {
 		e.printStackTrace();
 	}
 	
+}
+
+private static Item makeItem(ResultSet rs) throws SQLException {
+	Item item = new Item();
+	item.setId(rs.getInt(1));
+	item.setTitle(rs.getString(2));
+	item.setCategory(rs.getInt(3));
+	item.setPictureName(rs.getString(4));
+	item.setPicturePath(rs.getString(5));
+	item.setDescription(rs.getString(6));
+	item.setPostage(rs.getString(7));
+	item.setRprice(rs.getInt(8));
+	item.setSprice(rs.getInt(9));
+	item.setBincre(rs.getInt(10));
+	item.setCtime(rs.getTimestamp(11));
+	item.setSeller(rs.getInt(12));
+	return item;
+}
+public static List<Item> search(Connection conn, String searchItem) throws SQLException {
+	List<Item> result = new ArrayList<Item>();
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	try {
+		String sqlQuery = "select * from Items where title ILIKE ?";
+		st = conn.prepareStatement(sqlQuery);
+		st.setString(1, "%" + searchItem + "%");
+		rs = st.executeQuery();
+		while (rs.next()) {
+			result.add(makeItem(rs));
+		}
+		st.close();
+		rs.close();
+		for (Item i : result) {
+			sqlQuery = "select max(bid) from Bids where item = ? group by item";
+			st = conn.prepareStatement(sqlQuery);
+			st.setInt(1, i.getId());
+			rs = st.executeQuery();
+			if (rs.next()) {
+				System.out.println("has bidder");
+				i.setCurrentBiddingPrice(rs.getInt(1));
+			} else {
+				System.out.println("no bidder");
+				i.setCurrentBiddingPrice(i.getSprice());
+			}
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+	return result;
 }
 private Hashtable<String, String> errors= new Hashtable<String, String>();
 public boolean validate() {
