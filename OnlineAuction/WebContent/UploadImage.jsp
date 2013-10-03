@@ -52,14 +52,17 @@ System.out.println(path);
 <td>${Item.getCtime()}</td>
 </tr>
 </table>
-<form name="upform" action = "upload?path=<%=path%>" method ="post" enctype = "multipart/form-data">
+<form name="upform" action = "upload" method ="post" enctype = "multipart/form-data">
+<input type="hidden" name="action" value="uploadimage"/>
+<input type="hidden" name="path" value="<%=path %>"/>
+
 <table>
 <tr>
 <td>Picture</td>
 <td><input type = "file" style="width:500px;height:20px;" name = "iamge" /></td>
 <td><font color =red><%=Item.getErrorMsg("picture") %></font></td>
 </tr>
-<tr><td><input type = "submit" name="Start Auction"/></td></tr>
+<tr><td><input type = "submit" value="Start Auction"/></td></tr>
 </table>
 </form>
 </body>

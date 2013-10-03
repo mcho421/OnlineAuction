@@ -74,20 +74,23 @@ public class Upload extends HttpServlet {
 			     items = upload.parseRequest(request);
 			    } catch (FileUploadException e) {
 			     System.out.println(e.getMessage());
+			     newitem.setErrorMsg("picture", e.getMessage());
 			    }
 			   Iterator it = items.iterator();
 			   while(it.hasNext()){
 			    FileItem fileItem = (FileItem) it.next();
 			    if(!fileItem.isFormField()){   
 			     if(fileItem.getName()!=null && fileItem.getSize()!=0){
-//			      File fullFile = new File(fileItem.getName());
-//			      File newFile = new File(path+"image\\" + username+fullFile.getName());
-			      File newFile = new File(imgDir, username+"-"+fileItem.getName());
+
+			      //File fullFile = new File(fileItem.getName());
+			      long time = System.currentTimeMillis();
+			      String uploadtime = String.valueOf(time);
+			      File newFile = new File(imgDir, username+uploadtime+"-"+fileItem.getName());
+			      //to avoid user upload a same file mutiple times, add the upload time into new file name.
 //			      picture=path+"image\\" + username+fullFile.getName();
 			      System.out.println(newFile.getName());
 			      try {
 			        fileItem.write(newFile);
-			        System.out.println("cunshangle");
 					newitem.setImageurl(newFile.getName());
 					newitem.Insert(username);
 					request.setAttribute("Item", newitem);

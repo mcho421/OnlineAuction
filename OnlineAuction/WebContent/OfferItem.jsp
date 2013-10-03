@@ -13,10 +13,31 @@ String path = getServletContext().getRealPath("/");
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Offer An Item</title>
 </head>
+<script type="text/JavaScript">
+function chk(lbl){
 
+    var txtval=lbl.value;    
+     
+    var key = event.keyCode;  
+    if((key < 48||key > 57)&&key != 46)  
+    {    
+     event.keyCode = 0;  
+    }  
+    else  
+    {  
+     if(key == 46)  
+     {  
+      if(txtval.indexOf(".") != -1||txtval.length == 0)  
+       event.keyCode = 0;  
+     }  
+   }  
+}
+
+</script>
 <body>
 <%@ include file="/WEB-INF/header.jsp" %>
-<form name ="offeritem" method = "post" action = "offeritem?user = <%=username%>" >
+<form name ="offeritem" method = "post" action = "controller" >
+<input type="hidden" name="action" value="offeritem"/>
 <table>
 <tr>
 <td><font size = '4' color =red>Hello, <%=username%></font></td>
@@ -48,18 +69,18 @@ String path = getServletContext().getRealPath("/");
 </tr>
 <tr>
 <td>Reserve Price</td>
-<td><input type = "text" style="width:500px;height:20px;"name = "rprice"value = "${Item.getRprice()}"/></td>
+<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;"name = "rprice"value = "${Item.getRprice()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("rprice") %></font></td>
 </tr>
 <tr>
 <td>Bidding Start Price</td>
-<td><input type = "text" style="width:500px;height:20px;"name = "sprice"value = "${Item.getSprice()}"/></td>
+<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;"name = "sprice"value = "${Item.getSprice()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("sprice") %></font></td>
 </tr>
 <tr>
 <td>Bidding Increments</td>
-<td><input type = "text"style="width:500px;height:20px;" name = "bincre"value = "${ tem.getBincre()}"/></td>
-<td><font color =red><%=Item.getErrorMsg("iprice") %></font></td>
+<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "bincre"value = "${Item.getBincre()}"/></td>
+<td><font color =red><%=Item.getErrorMsg("bprice") %></font></td>
 </tr>
 <tr>
 <td>Closing Time</td>

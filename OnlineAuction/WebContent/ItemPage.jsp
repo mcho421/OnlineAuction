@@ -25,11 +25,10 @@
 				<tr><td><b>Time left: </b>${item.timeLeft}</td></tr>
 				<tr><td><b>Current bid: $ ${item.currentBiddingPrice}</b></td></tr>
 				<tr><td>
-					<b>Make a bid: $</b>
 					<form name="bidform" action="controller" method="post">
 						<input type="hidden" name="action" value="makeBid"/>
 						<input type="hidden" name="item" value="${item.id}"/>
-						<input type="text" name="bidAmount">
+						<b>Make a bid: $</b> <input type="text" name="bidAmount">
 						<input type="submit" value ="Bid!">
 					</form>
 							

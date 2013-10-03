@@ -309,12 +309,19 @@ public boolean validate() {
 		System.out.println("1");
 		okAll = false;
 		}
-
+	if(!title.matches("^\\W*(\\w+(\\W+|$)){1,10}$")){
+		errors.put("title","invalid input, 10 words max");
+		okAll = false;
+	}
 	if(!description.matches("[0-9a-zA-Z ,!?.-]+")){
 	    errors.put("descrption", "invalid input, only numbers, letters ',' '.' '!' '?' allowed");
 	    System.out.println("2");
 	    okAll = false;
 	   }
+	if(!description.matches("^\\W*(\\w+(\\W+|$)){1,10}$")){
+		errors.put("description","invalid input, 100 words max");
+		okAll = false;
+	}
 	if(!postage.matches("[0-9a-zA-Z ,!?.-]+")) {
 		errors.put("postage", "invalid input, only numbers, letters ',' '.' '!' '?' allowed");
 		System.out.println("3");
