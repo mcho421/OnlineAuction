@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import exceptions.ServiceLocatorException;
 import jdbc.MailSender;
@@ -46,6 +47,7 @@ public class Controller extends HttpServlet {
         commandMap.put("loginPage", new CommandLoginPage());
         commandMap.put("login", new CommandLogin());
         commandMap.put("updateUser", new CommandUpdateUser());
+        commandMap.put("userIndexPage", new CommandUserIndexPage());
     }
 
 	/**
@@ -79,6 +81,27 @@ public class Controller extends HttpServlet {
 		}
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
 		dispatcher.forward(request, response);
+	}
+	
+	public static boolean isLoggedIn(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("username") == null) {
+			return false;
+		}
+		return true;
+	}
+
+	public static String getUsername(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("username") == null) {
+			return null;
+		}
+		return (String) session.getAttribute("username");
+	}
+
+	public static void invalidateSession(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		session.invalidate();
 	}
 
 }

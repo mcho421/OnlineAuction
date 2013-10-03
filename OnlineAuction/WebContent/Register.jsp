@@ -1,14 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%
-String path =request.getContextPath();
-String basePath =request.getScheme() + "://"
-+ request.getServerName() +":" + request.getServerPort()
-+ path + "/";
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<jsp:useBean id="RegisterForm" class="group.RegisterForm"
-scope="request" />
+<jsp:useBean id="RegisterForm" class="group.UserBean" scope="request" />
 <jsp:setProperty property="*" name="RegisterForm" />
 <script language="javascript">
 function on_submit()
@@ -43,12 +36,12 @@ function on_submit()
 </script>
 <html>
 <head>
-<base href="<%=basePath%>">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Sign Up</title>
 </head>
 <body>
-<form name="form1" method="post" action="register" onSubmit="return on_submit()">
+<form name="form1" method="post" action="controller" onSubmit="return on_submit()">
+<input type="hidden" name="action" value="register"/>
 <table>
 
 <tr>
@@ -75,7 +68,6 @@ function on_submit()
 <td><input type ="submit" value="Continue" ></td>
 <td></td>
 </tr>
-
 
 </table>
 </form>

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class CommandRegisterPage implements Command {
 	
-	private static final String page = "/WEB-INF/register.jsp";
+	private static final String page = "/Register.jsp";
 
 	public CommandRegisterPage() {
 		super();

@@ -18,6 +18,7 @@ import jdbc.DBConnectionFactory;
 import jdbc.DBConnectionFactory;
 
 public class UserBean {
+	private Hashtable<String, String> errors= new Hashtable<String, String>();
 	private int userid;
 	private String username = "";
 	private String userpwd = "";
@@ -40,49 +41,49 @@ public class UserBean {
 		return username;
 	}
 	public void setUsername(String username) {
-		this.username = username;
+		this.username = (username != null) ? username : "";
 	}
 	public String getUserpwd() {
 		return userpwd;
 	}
 	public void setUserpwd(String userpwd) {
-		this.userpwd = userpwd;
+		this.userpwd = (userpwd != null) ? userpwd : "";
 	}
 	public String getUseremail() {
 		return useremail;
 	}
 	public void setUseremail(String useremail) {
-		this.useremail = useremail;
+		this.useremail = (useremail != null) ? useremail : "";
 	}
 	public String getFname() {
 		return fname;
 	}
 	public void setFname(String fname) {
-		this.fname = fname;
+		this.fname = (fname != null) ? fname : "";
 	}
 	public String getLname() {
 		return lname;
 	}
 	public void setLname(String lname) {
-		this.lname = lname;
+		this.lname = (lname != null) ? lname : "";
 	}
 	public String getYearofbirth() {
 		return yearofbirth;
 	}
 	public void setYearofbirth(String yearofbrirth) {
-		this.yearofbirth = yearofbrirth;
+		this.yearofbirth = (yearofbrirth != null) ? yearofbrirth : "";
 	}
 	public String getFulladdress() {
 		return fulladdress;
 	}
 	public void setFulladdress(String fulladdress) {
-		this.fulladdress = fulladdress;
+		this.fulladdress = (fulladdress != null) ? fulladdress : "";
 	}
 	public String getCreditcard() {
 		return creditcard;
 	}
 	public void setCreditcard(String creditcard) {
-		this.creditcard = creditcard;
+		this.creditcard = (creditcard != null) ? creditcard : "";
 	}
 	public int getStatus() {
 		return status;
@@ -100,7 +101,7 @@ public class UserBean {
 		return namemd5;
 	}
 	public void setNameMd5(String namemd5) {
-		this.namemd5 = namemd5;
+		this.namemd5 = (namemd5 != null) ? namemd5 : "";
 	}
 	public void Initialize(String Username) {
 
@@ -147,7 +148,33 @@ public class UserBean {
 				e.printStackTrace();
 		}
 	}
-	private Hashtable<String, String> errors= new Hashtable<String, String>();
+
+	public boolean validateForRegistration() {
+		boolean okAll = true;
+		if (username.length()>10 || username.length()<6) {
+			errors.put("name", "The length of username must be between 6 and 10.");
+			okAll = false;
+		}
+		if(!username.matches("[a-zA-Z0-9_-]+")) {
+			errors.put("name", "The content of username must be numbers, alphabets or mixing above.");
+			okAll = false;
+		}
+		if (userpwd.length() > 10 ||userpwd.length() < 6) {
+		    errors.put("password","The length of password must be between 6 and 10");
+		    okAll = false;
+		}
+		if (!userpwd.matches("[a-zA-Z0-9_-]+")) {
+			errors.put("password","The content of password must be numbers, alphabets or mixing above.");
+			okAll = false;
+			}
+		
+		if(!useremail.matches("[a-z0-9_-]+@[a-z0-9_-]+(\\.[a-z0-9_-]+)+")){
+		    errors.put("email", "Invalide email address, all the alphabets must be lower case.");
+		    okAll = false;
+		}
+		return okAll;
+	}
+
 	public boolean validate() {
 		boolean okAll = true;
 		if (userpwd.length() > 10 ||userpwd.length() < 6) {
@@ -187,13 +214,14 @@ public class UserBean {
 	}
 	public void setErrorMsg(String err,String errMsg) {
 		if (err != null && errMsg !=null) {
-		errors.put(err, errMsg);
+			errors.put(err, errMsg);
 		}
-		}
-		public String getErrorMsg(String err) {
-		Object message = (String)errors.get(err);
-		return (String) ((message == null) ? "" : message);
-		}
+	}
+
+	public String getErrorMsg(String err) {
+		String message = errors.get(err);
+		return (message == null) ? "" : message;
+	}
 	
 	public boolean canUpdateEmail(Connection conn, String useremail) throws SQLException {
 		PreparedStatement st = null;
@@ -224,7 +252,7 @@ public class UserBean {
 		return true;
 	}
 		
-	public boolean isUnique(Connection conn, RegisterForm new_user) throws SQLException {
+	public boolean isUnique(Connection conn) throws SQLException {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
@@ -233,7 +261,7 @@ public class UserBean {
 			st.setString(1, username);
 			rs = st.executeQuery();
 			if(rs.next()){
-				new_user.setErrorMsg("name", "Sorry. This username is already in use");
+				setErrorMsg("name", "Sorry. This username is already in use");
 				System.out.println("invalid");
 				return false;
 			}
@@ -245,7 +273,7 @@ public class UserBean {
 			st.setString(1, useremail);
 			rs = st.executeQuery();
 			if(rs.next()){
-				new_user.setErrorMsg("email", "Sorry. This email address is already in use");
+				setErrorMsg("email", "Sorry. This email address is already in use");
 				System.out.println("invalid");
 				return false;
 			}

@@ -3,7 +3,6 @@ package controller;
 import exceptions.MailSenderException;
 import exceptions.ServiceLocatorException;
 import group.Md5;
-import group.RegisterForm;
 import group.UserBean;
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ import jdbc.MailSender;
 
 public class CommandRegister implements Command {
 	
-	private static final String registerPage = "/WEB-INF/register.jsp";
+	private static final String registerPage = "/Register.jsp";
 	private static final String confirmPage = "/Regsuc.jsp";
 
 	public CommandRegister() {
@@ -46,13 +45,18 @@ public class CommandRegister implements Command {
 		user.setUserpwd(userpwd);
 		user.setUseremail(useremail);
 
-		RegisterForm new_user = new RegisterForm();
-		request.setAttribute("RegisterForm",new_user);
-		new_user.setUsername(username);
-		new_user.setUserpwd(userpwd);
-		new_user.setUseremail(useremail);
+//		request.setAttribute("RegisterForm",new_user);
+		request.setAttribute("RegisterForm",user);
+//		new_user.setUsername(username);
+//		new_user.setUserpwd(userpwd);
+//		new_user.setUseremail(useremail);
 
-		if(!new_user.validate()){
+/*		if(!new_user.validate()){
+			System.out.println("invalid");
+			return registerPage;
+		}
+*/
+		if(!user.validateForRegistration()){
 			System.out.println("invalid");
 			return registerPage;
 		}
@@ -61,7 +65,7 @@ public class CommandRegister implements Command {
 		try {
 			try {
 				conn = DBConnectionFactory.getConnection();
-				boolean isUnique = user.isUnique(conn, new_user);
+				boolean isUnique = user.isUnique(conn);
 				if (isUnique == false) {
 					return registerPage;
 				}

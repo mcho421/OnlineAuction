@@ -19,6 +19,7 @@ import jdbc.DBConnectionFactory;
 public class CommandUpdateUser implements Command {
 	
 	private static final String page = "/UserIndex.jsp";
+	private static final String login = "/controller?action=loginPage";
 
 	public CommandUpdateUser() {
 		super();
@@ -27,6 +28,9 @@ public class CommandUpdateUser implements Command {
 	@Override
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, SQLException {
+
+		if (!Controller.isLoggedIn(request, response))
+			return login;
 
 		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
