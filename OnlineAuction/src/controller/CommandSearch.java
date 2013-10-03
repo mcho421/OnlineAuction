@@ -30,11 +30,20 @@ public class CommandSearch implements Command {
 		String category = request.getParameter("category");
 		System.out.println("search: "+searchItem);
 		System.out.println("category: "+category);
+		if (searchItem == null)
+			searchItem = "";
+		int catNumber = 0;
+		try {
+		    catNumber = Integer.parseInt(category);
+		} catch ( Exception e ) {
+		    catNumber = 0;
+		}
+
 		List<Item> result = new ArrayList<Item>();
 		Connection conn = null;
 		try {
 			conn = DBConnectionFactory.getConnection();
-			result = Item.search(conn, searchItem);
+			result = Item.search(conn, searchItem, catNumber);
 			for (Item i : result) {
 				System.out.println(i.getTitle());
 			}
