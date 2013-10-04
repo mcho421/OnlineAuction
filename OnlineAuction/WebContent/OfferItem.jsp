@@ -32,11 +32,55 @@ function chk(lbl){
      }  
    }  
 }
-
+function on_submit()
+ {
+  if (offeritem.title.value == "")
+    {
+     alert("Enter Title");
+     offeritem.title.focus();
+     return false;
+    }
+  if (offeritem.descrpition.value == "")
+  {
+   alert("Enter Descrpition");
+   offeritem.descrpition.focus();
+   return false;
+  }
+  if (offeritem.postage.value == "")
+  {
+   alert("Enter Postage Details");
+   offeritem.postage.focus();
+   return false;
+  }
+  if (offeritem.sprice.value == "")
+  {
+   alert("Enter Bidding Start Price");
+   offeritem.sprice.focus();
+   return false;
+  }
+  if (offeritem.rprice.value == "")
+  {
+   alert("Enter Reserve Price");
+   offeritem.rprice.focus();
+   return false;
+  }
+  if (offeritem.bincre.value == "")
+  {
+   alert("Enter Bidding Increments");
+   offeritem.bincre.focus();
+   return false;
+  }
+  if (offeritem.ctime.value == "")
+  {
+   alert("Enter Closing Time");
+   offeritem.ctime.focus();
+   return false;
+  }
+ }
 </script>
 <body>
 <%@ include file="/WEB-INF/header.jsp" %>
-<form name ="offeritem" method = "post" action = "controller" >
+<form name ="offeritem" method = "post" action = "controller" onSubmit="return on_submit()" >
 <input type="hidden" name="action" value="offeritem"/>
 <table>
 <tr>
@@ -84,11 +128,8 @@ function chk(lbl){
 </tr>
 <tr>
 <td>Closing Time</td>
-<td><select name="closingtime" style="width:300px;height:20px;">
-  <option value="1" selected>1 hour later</option>
-  <option value="2">2 hour later</option>
-  <option value="3">3 hour later</option>
-</select></td>
+<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "closingtime" value = "10"/></td>
+<td><font color =red><%=Item.getErrorMsg("closingtime") %></font></td>
 </tr>
 <tr>
 <td><input type = "submit" value = "Upload Picture"/></td>

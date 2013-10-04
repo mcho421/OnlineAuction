@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <sql:query var="rs" dataSource="jdbc/database">
-select id, username , email, confirmed, status from Users
+select id, username , email, confirmed, status from Users where status < 2
 </sql:query>
 <% 
 Object username=session.getAttribute("username"); 

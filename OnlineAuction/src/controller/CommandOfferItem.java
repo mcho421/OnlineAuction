@@ -48,29 +48,14 @@ public class CommandOfferItem implements Command {
 		newitem.setSprice(Integer.parseInt(sprice));
 		newitem.setBincre(Integer.parseInt(bprice));
 		int ctime = Integer.parseInt(request.getParameter("closingtime"));
-		if(ctime == 1){
-			long retryDate = System.currentTimeMillis();
-	        int sec = 3600;
-	        Timestamp original = new Timestamp(retryDate);
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTimeInMillis(original.getTime());
-	        cal.add(Calendar.SECOND, sec);
-	        Timestamp later = new Timestamp(cal.getTime().getTime());
-		    newitem.setCtime(later);
+		if(ctime < 3 || ctime > 60){
+			newitem.setErrorMsg("ctime", "closing time ranges from 3 min to 60 min");
+			session.setAttribute("Item", newitem);
+			return invalid;
 		}
-		if(ctime == 2){
+		if(ctime>=3 && ctime<=60){
 			long retryDate = System.currentTimeMillis();
-	        int sec = 7200;
-	        Timestamp original = new Timestamp(retryDate);
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTimeInMillis(original.getTime());
-	        cal.add(Calendar.SECOND, sec);
-	        Timestamp later = new Timestamp(cal.getTime().getTime());
-		    newitem.setCtime(later);
-			}
-		if(ctime == 3){
-			long retryDate = System.currentTimeMillis();
-	        int sec = 10800;
+	        int sec = 60*ctime;
 	        Timestamp original = new Timestamp(retryDate);
 	        Calendar cal = Calendar.getInstance();
 	        cal.setTimeInMillis(original.getTime());

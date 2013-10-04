@@ -18,9 +18,10 @@ public class CommandHaltItem implements Command {
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException,
 			SQLException {
+		Connection conn = null;
 		int id = Integer.parseInt(request.getParameter("itemid"));		
 	try{
-		Connection conn = DBConnectionFactory.getConnection();
+		conn = DBConnectionFactory.getConnection();
 		if(Item.HaltItem(conn, id)) {
 			request.setAttribute("msg", "halted successfully");
 			return success;
@@ -33,7 +34,13 @@ public class CommandHaltItem implements Command {
 		e.printStackTrace();
 		request.setAttribute("msg", "halted successfully");
 		return success;
-	} 
+	} finally{
+		if(conn!=null) 
+		{
+		conn.close();
+		System.out.println("conn closed");
+		}
+	}
 	}
 
 }

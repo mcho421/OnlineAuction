@@ -319,7 +319,7 @@ public boolean validate() {
 	    System.out.println("2");
 	    okAll = false;
 	   }
-	if(!description.matches("^\\W*(\\w+(\\W+|$)){1,10}$")){
+	if(!description.matches("^\\W*(\\w+(\\W+|$)){1,100}$")){
 		errors.put("description","invalid input, 100 words max");
 		okAll = false;
 	}
@@ -334,7 +334,7 @@ public boolean validate() {
 		okAll = false;
 	}
 	if(sprice < 0){
-		errors.put("sprice", "invalid price");
+		errors.put("spri ce", "invalid price");
 		System.out.println("5");
 		okAll = false;	
 			}

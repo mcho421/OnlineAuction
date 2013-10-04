@@ -19,9 +19,10 @@ public class CommandBanUser implements Command {
 			HttpServletResponse response) throws ServletException, IOException,
 			SQLException {
 		// TODO Auto-generated method stub
+		Connection conn = null;
 		int id = Integer.parseInt(request.getParameter("userid"));		
 		try{
-			Connection conn = DBConnectionFactory.getConnection();
+			conn = DBConnectionFactory.getConnection();
 			if(UserBean.BanUser(conn, id)) {
 				request.setAttribute("msg", "banned successfully");
 				return success;
@@ -34,7 +35,13 @@ public class CommandBanUser implements Command {
 			e.printStackTrace();
 			request.setAttribute("msg", "banned failed");
 			return success;
-		} 
+		} finally{
+			if(conn!=null) 
+				{
+				conn.close();
+				System.out.println("conn closed");
+				}
+		}
 	}
 
 }
