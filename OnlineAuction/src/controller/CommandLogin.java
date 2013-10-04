@@ -1,6 +1,5 @@
 package controller;
 
-import group.DBconn;
 import group.UserBean;
 
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class CommandLogin implements Command {
 	
 	private static final String invalid = "/Login.jsp";
 	private static final String success = "/UserIndex.jsp";
-
+    private static final String admin = "/Admin.jsp";
 	public CommandLogin() {
 		super();
 	}
@@ -38,8 +37,22 @@ public class CommandLogin implements Command {
 		try {
 			conn = DBConnectionFactory.getConnection();
 			boolean loginResult = UserBean.login(conn, request, un, pw);
-			if (loginResult == true)
-				return success;
+			if (loginResult == true){
+				if(UserBean.getstatus(conn, un, request)==2) return admin;
+				if(UserBean.getstatus(conn, un, request)==0) {
+					if(UserBean.getconfirmation(conn, un)) return success;
+					else {
+						String msg = "Please login to your email account and click the provided URL to confirm registration";
+						request.setAttribute("msg", msg);
+						return invalid;
+					}
+				}
+				if(UserBean.getstatus(conn, un, request)==1) {
+					String msg = "you have been banned, please contact adminastrators";
+					request.setAttribute("msg", msg);
+					return invalid;
+				}
+			}
 			else
 				return invalid;
 
