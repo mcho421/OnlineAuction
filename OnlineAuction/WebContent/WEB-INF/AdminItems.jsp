@@ -36,8 +36,8 @@ Object username=session.getAttribute("username");
 	<c:forEach var="row" items="${rs.rows}">
 		<tr>
 			<td width="30%">
-				<c:if test="${row.picturePath != null}">
-						<img src="ImageServlet?image=${r.picturePath}" style="max-width: 200px; max-height: 200px;">
+				<c:if test="${row.picturepath != null}">
+						<img src="ImageServlet?image=${r.picturepath}" style="max-width: 200px; max-height: 200px;">
 			    </c:if>
 			</td>
 			<td width="25%"><b>${row.title}</b><br>${row.description}</td>

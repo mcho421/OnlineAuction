@@ -35,6 +35,8 @@ public class CommandConfirmBid implements Command {
 
 		if (!Controller.isLoggedIn(request, response))
 			return login;
+		if(Controller.isAdmin(request, response))
+			return login;
 
 		String itemIdString = request.getParameter("item");
 		String bidAmountString = request.getParameter("bidAmount");

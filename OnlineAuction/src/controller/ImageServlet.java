@@ -41,6 +41,7 @@ public class ImageServlet extends HttpServlet {
 				throw new RuntimeException();
 			}
 			File baseDir = new File(getServletContext().getRealPath("/"));
+			System.out.println(getServletContext().getRealPath("/")+"image");
 			File imgDir = new File(baseDir, "image");
 			File imgFile = new File(imgDir, fileName);
 

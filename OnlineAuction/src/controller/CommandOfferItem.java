@@ -50,22 +50,33 @@ public class CommandOfferItem implements Command {
 			return invalid;
 			}
 		if(bprice == ""){
-			newitem.setErrorMsg("rprice", "Enter Bidding Increments");
+			newitem.setErrorMsg("bprice", "Enter Bidding Increments");
 			request.setAttribute("Item", newitem);
 			return invalid;
 			}
+		if(rprice =="") {
+			newitem.setErrorMsg("rprice", "Enter Reserve Price");
+			request.setAttribute("Item", newitem);
+			return invalid;
+		}
+		String ctime = request.getParameter("closingtime");
+		if(ctime == "") {
+			newitem.setErrorMsg("ctime", "Enter Closing Time");
+			request.setAttribute("Item", newitem);
+			return invalid;
+		}
 		newitem.setRprice(Integer.parseInt(rprice));
 		newitem.setSprice(Integer.parseInt(sprice));
 		newitem.setBincre(Integer.parseInt(bprice));
-		int ctime = Integer.parseInt(request.getParameter("closingtime"));
-		if(ctime < 3 || ctime > 60){
+		int closingtime = Integer.parseInt(ctime);
+		if(closingtime < 3 || closingtime > 60){
 			newitem.setErrorMsg("ctime", "closing time ranges from 3 min to 60 min");
 			request.setAttribute("Item", newitem);
 			return invalid;
 		}
-		if(ctime>=3 && ctime<=60){
+		if(closingtime>=3 && closingtime<=60){
 			long retryDate = System.currentTimeMillis();
-	        int sec = 60*ctime;
+	        int sec = 60*closingtime;
 	        Timestamp original = new Timestamp(retryDate);
 	        Calendar cal = Calendar.getInstance();
 	        cal.setTimeInMillis(original.getTime());
