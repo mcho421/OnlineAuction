@@ -26,7 +26,7 @@
 				<tr><td><b>Current bid: $ ${item.currentBiddingPrice}</b></td></tr>
 				<tr><td>
 					<form name="bidform" action="controller" method="post">
-						<input type="hidden" name="action" value="makeBid"/>
+						<input type="hidden" name="action" value="confirmBid"/>
 						<input type="hidden" name="item" value="${item.id}"/>
 						<b>Make a bid: $</b> <input type="text" name="bidAmount">
 						<input type="submit" value ="Bid!">

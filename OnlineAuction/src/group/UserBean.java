@@ -148,6 +148,45 @@ public class UserBean {
 				e.printStackTrace();
 		}
 	}
+	public static UserBean initializeFromUsername(Connection conn, String username) throws SQLException {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		UserBean user = new UserBean();
+		try {
+			String sqlQuery = "SELECT * FROM Users WHERE username = ?";
+			st = conn.prepareStatement(sqlQuery);
+			st.setString(1, username);
+			rs = st.executeQuery();
+			if (rs.next()){
+				user = makeUser(rs);
+			} else {
+				System.out.println("Username "+username+" not found.");
+				throw new SQLException();
+			}
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+		return user;
+	}
+	private static UserBean makeUser(ResultSet rs) throws SQLException {
+		UserBean user = new UserBean();
+		user.setUserid(rs.getInt(1));
+		user.setUsername(rs.getString(2));
+		user.setUserpwd(rs.getString(3));
+		user.setUseremail(rs.getString(4));
+		user.setStatus(rs.getInt(5));
+		user.setConfirmed(rs.getBoolean(6));
+		user.setNameMd5(rs.getString(7));
+		user.setYearofbirth(rs.getString(8));
+		user.setFname(rs.getString(9));
+		user.setLname(rs.getString(10));
+		user.setFulladdress(rs.getString(11));
+		user.setCreditcard(rs.getString(12));
+		return user;
+	}
 
 	public boolean validateForRegistration() {
 		boolean okAll = true;

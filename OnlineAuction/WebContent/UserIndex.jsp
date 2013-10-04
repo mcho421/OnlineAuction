@@ -75,9 +75,9 @@ function on_submit()
 </tr>
 <tr>
 <td><input type="button" onclick="window.location.href='OfferItem.jsp'" value ="Offer an item"></td>
-<td><input type="button" onclick="window.location.href='Login.jsp'" value ="items on auction"></td>
+<td><input type="button" onclick="window.location.href='controller?action=search'" value ="items on auction"></td>
 <td><input type="button" onclick="window.location.href='Register.jsp'" value ="message"></td>
-<td><input type="button" onclick="window.location.href='Register.jsp'" value ="logout"></td>
+<td><input type="button" onclick="window.location.href='controller?action=logout'" value ="logout"></td>
 </tr>
 </table>
 <form name="updateform" method="post" action="controller" onSubmit="return on_submit()">
