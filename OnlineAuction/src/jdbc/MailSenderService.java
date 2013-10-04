@@ -4,6 +4,8 @@ import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.DelayQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -58,7 +60,7 @@ public class MailSenderService {
 	static Logger logger = Logger.getLogger(MailSenderService.class.getName());
 	static MailSenderService sender;
 	private MailSender mailSender;
-	private ThreadPoolExecutor executor;
+	private ExecutorService executor;
 	private Session session;
 	private InitialContext ctx;
 	
@@ -68,8 +70,9 @@ public class MailSenderService {
 			Context envContext = (Context) ctx.lookup("java:comp/env");
 			session = (Session) envContext.lookup("mail/Session");
 			logger.info("Mailer Session obtained"+session.toString());
-			BlockingQueue<Runnable> mailQueue = new ArrayBlockingQueue<Runnable>(10);
-			executor = new ThreadPoolExecutor(5, 20, 20, TimeUnit.SECONDS, mailQueue);
+//			BlockingQueue<Runnable> mailQueue = new ArrayBlockingQueue<Runnable>(10);
+//			executor = new ThreadPoolExecutor(5, 20, 20, TimeUnit.SECONDS, mailQueue);
+			executor = Executors.newSingleThreadExecutor();
 //			mailSender = new MailSender();
 			mailSender = MailSender.getMailSender();
 		} catch (NamingException e) {

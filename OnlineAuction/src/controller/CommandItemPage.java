@@ -41,6 +41,7 @@ public class CommandItemPage implements Command {
 			conn = DBConnectionFactory.getConnection();
 			item = Item.initializeFromId(conn, itemId);
 			request.setAttribute("item", item);
+			request.setAttribute("canDisplayAcceptReject", item.canAcceptReject(conn, Controller.getUsername(request, response)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("errorMsg", "Could not find item id "+itemId);

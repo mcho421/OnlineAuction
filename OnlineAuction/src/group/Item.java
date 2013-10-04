@@ -26,6 +26,7 @@ private int sprice;
 private int bincre;
 private int currentBiddingPrice;
 private Timestamp ctime = new Timestamp(System.currentTimeMillis());
+private boolean halted;
 private int seller;
 private int currentBidder;
 
@@ -113,6 +114,12 @@ public void setCurrentBidder(int currentBidder) {
 public int getCurrentBidder() {
 	return currentBidder;
 }
+public void setHalted(boolean halted) {
+	this.halted = halted;
+}
+public boolean getHalted() {
+	return halted;
+}
 
 public int getMinimumBid() {
 	return getCurrentBiddingPrice() + getBincre();
@@ -152,6 +159,31 @@ public String getTimeLeft() {
 	}
 
 	return "Unknown";
+}
+public boolean canAcceptReject(Connection conn, String username) throws SQLException {
+	if (!isClosed())
+		return false;
+	if (getCurrentBidder() == 0)
+		return false;
+	if (getCurrentBiddingPrice() >= getRprice())
+		return false;
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	try {
+		UserBean user = UserBean.initializeFromUsername(conn, username);
+		if (user.getUserid() == getSeller()) {
+			return true;
+		} else {
+			return false;
+		}
+	} catch (Exception e) {
+		return false;
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
 }
 public void Initialize(String Title) {
 
@@ -250,14 +282,15 @@ public static void updateCurrentBid(Connection conn, Item i) throws SQLException
 	ResultSet rs = null;
 	try {
 //		String sqlQuery = "select max(bid) from Bids where item = ? group by item";
-		String sqlQuery = "select bidder, bid from Bids where bid in (select max(bid) from bids where item = ?)";
+		String sqlQuery = "select bidder, bid, id from Bids where bid in (select max(bid) from bids where item = ?) AND item = ?";
 		st = conn.prepareStatement(sqlQuery);
 		st.setInt(1, i.getId());
+		st.setInt(2, i.getId());
 		rs = st.executeQuery();
 		if (rs.next()) {
-			System.out.println("has bidder");
 			i.setCurrentBidder(rs.getInt(1));
 			i.setCurrentBiddingPrice(rs.getInt(2));
+			System.out.println("has bidder. id="+rs.getInt(3)+" price="+rs.getInt(2)+" when seaching for item.id="+i.getId());
 		} else {
 			System.out.println("no bidder");
 			i.setCurrentBiddingPrice(i.getSprice());
