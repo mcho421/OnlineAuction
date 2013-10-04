@@ -1,18 +1,21 @@
-CREATE TABLE Users (
-    id SERIAL,
-    username TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    status INTEGER NOT NULL,
-    confirmed BOOLEAN NOT NULL,
-    nameMd5 TEXT NOT NULL,
-    yearOfBirth TEXT,
-    fname TEXT,
-    lname TEXT,
-    fullAddress TEXT,
-    creditCard TEXT,
-    PRIMARY KEY (id)
-);
+CREATE TABLE users
+(
+  id serial NOT NULL,
+  username text NOT NULL,
+  password text NOT NULL,
+  email text NOT NULL,
+  status integer NOT NULL,
+  confirmed boolean NOT NULL,
+  namemd5 text NOT NULL,
+  yearofbirth text,
+  fname text,
+  lname text,
+  fulladdress text,
+  creditcard text,
+  CONSTRAINT users_pkey PRIMARY KEY (id),
+  CONSTRAINT users_email_key UNIQUE (email),
+  CONSTRAINT users_username_key UNIQUE (username)
+)
 
 CREATE TABLE Categories (
     id SERIAL,
@@ -20,22 +23,28 @@ CREATE TABLE Categories (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Items (
-    id SERIAL,
-    title TEXT NOT NULL, 
-    category INTEGER NOT NULL,
-    pictureName TEXT,
-    picturePath TEXT,
-    description TEXT,
-    postageDetails TEXT,
-    reservePrice INTEGER,
-    biddingStartPrice INTEGER NOT NULL,
-    biddingIncrements INTEGER NOT NULL,
-    closingTime TIMESTAMP NOT NULL,
-    seller INTEGER NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (category) REFERENCES Categories(id),
-    FOREIGN KEY (seller) REFERENCES Users(id)
+CREATE TABLE items
+(
+  id serial NOT NULL,
+  title text NOT NULL,
+  category integer NOT NULL,
+  picturename text,
+  picturepath text,
+  description text,
+  postagedetails text,
+  reserveprice integer,
+  biddingstartprice integer NOT NULL,
+  biddingincrements integer NOT NULL,
+  closingtime timestamp without time zone NOT NULL,
+  seller integer NOT NULL,
+  halted boolean DEFAULT false,
+  CONSTRAINT items_pkey PRIMARY KEY (id),
+  CONSTRAINT items_category_fkey FOREIGN KEY (category)
+      REFERENCES categories (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT items_seller_fkey FOREIGN KEY (seller)
+      REFERENCES users (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE TABLE Bids (

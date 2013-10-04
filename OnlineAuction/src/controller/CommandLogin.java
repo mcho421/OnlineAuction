@@ -19,9 +19,9 @@ import jdbc.DBConnectionFactory;
 
 public class CommandLogin implements Command {
 	
-	private static final String invalid = "/Login.jsp";
-	private static final String success = "/UserIndex.jsp";
-    private static final String admin = "/Admin.jsp";
+	private static final String invalid = "/controller?action=loginPage";
+	private static final String success = "/controller?action=userIndexPage";
+    private static final String admin = "/controller?action=adminpage";
 	public CommandLogin() {
 		super();
 	}
@@ -32,15 +32,22 @@ public class CommandLogin implements Command {
 		System.out.println("in service method");
 		String un = request.getParameter("username");
 		String pw = request.getParameter("password");
-		
+		HttpSession session = request.getSession();
 		Connection conn = null;
 		try {
 			conn = DBConnectionFactory.getConnection();
 			boolean loginResult = UserBean.login(conn, request, un, pw);
 			if (loginResult == true){
-				if(UserBean.getstatus(conn, un, request)==2) return admin;
+				if(UserBean.getstatus(conn, un, request)==2) {
+					session.setAttribute("username", un);
+					session.setAttribute("admin", "1");
+					return admin;
+				}
 				if(UserBean.getstatus(conn, un, request)==0) {
-					if(UserBean.getconfirmation(conn, un)) return success;
+					if(UserBean.getconfirmation(conn, un)) {
+						session.setAttribute("username", un);
+						return success;
+					}
 					else {
 						String msg = "Please login to your email account and click the provided URL to confirm registration";
 						request.setAttribute("msg", msg);

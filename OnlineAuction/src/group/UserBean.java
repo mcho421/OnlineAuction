@@ -282,11 +282,20 @@ public class UserBean {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (st != null)
-				st.close();
-			if (rs != null)
-				rs.close();
+		} finally{
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 		return true;
 	}
@@ -318,11 +327,20 @@ public class UserBean {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (st != null)
-				st.close();
-			if (rs != null)
-				rs.close();
+		}  finally{
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 		return true;
 	}
@@ -353,11 +371,20 @@ public class UserBean {
 			st.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (st != null)
-				st.close();
-			if (rs != null)
-				rs.close();
+		}  finally{
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 	}
 	
@@ -379,9 +406,20 @@ public class UserBean {
 			st.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (st != null)
-				st.close();
+		}  finally{
+			if(st!=null) st.close();
+			//if(rs!=null) rs.close();
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 	}
 
@@ -397,8 +435,8 @@ public class UserBean {
 			if(rs.next()) {
 				int uid = rs.getInt(1);
 				String username = rs.getString(2);
-				HttpSession session = request.getSession();
-				session.setAttribute("username", username);
+				//HttpSession session = request.getSession();
+				//session.setAttribute("username", username);
 				UserBean user = new UserBean();
 				user.Initialize(username);
 				request.setAttribute("UserBean",user);
@@ -410,11 +448,20 @@ public class UserBean {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (st != null)
-				st.close();
-			if (rs != null)
-				rs.close();
+		}  finally{
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 		return false;
 	}
@@ -443,11 +490,20 @@ public class UserBean {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			if (st != null)
-				st.close();
-			if (rs != null)
-				rs.close();
+		} finally{
+			if(st!=null) st.close();
+			if(rs!=null) rs.close();
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
 		}
 		return true;
 	}
@@ -467,7 +523,19 @@ public class UserBean {
 			rs.close();
 			} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally{
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
+		}
 		return s;
 	}
 	public static boolean BanUser(Connection conn, int id) {
@@ -480,10 +548,21 @@ public class UserBean {
 			st.close();
 			return true;
 			} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace();} finally{
+				if(conn!=null) 
+				{
+				try {
+					conn.close();
+					System.out.println("conn closed");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				}
+			}
+			
 			return false;
-		} 
-
 	}
 	public static boolean getconfirmation(Connection conn,String username) {
 		boolean confirmed = false;
@@ -501,7 +580,19 @@ public class UserBean {
 			rs.close();
 			} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}  finally{
+			if(conn!=null) 
+			{
+			try {
+				conn.close();
+				System.out.println("conn closed");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			}
+		}
 		return confirmed;
 	}
 	

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import jdbc.DBConnectionFactory;
 
 public class CommandBanUser implements Command {
-	private static final String success = "/AdminUsers.jsp";
+	private static final String success = "/controller?action=adminuserspage";
 	@Override
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException,

@@ -56,6 +56,9 @@ public class Controller extends HttpServlet {
         commandMap.put("haltitem", new CommandHaltItem());
         commandMap.put("itemPage", new CommandItemPage());
         commandMap.put("confirmBid", new CommandConfirmBid());
+        commandMap.put("adminpage", new CommandAdminPage());
+        commandMap.put("adminuserspage", new CommandAdminUsersPage());
+        commandMap.put("adminitemspage", new CommandAdminItemsPage());
     }
 
 	/**

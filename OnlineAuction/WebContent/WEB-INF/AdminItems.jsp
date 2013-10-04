@@ -12,17 +12,18 @@ Object username=session.getAttribute("username");
 </head>
 <body>
 
-<%@ include file="/WEB-INF/header.jsp" %>
+<%@ include file="/WEB-INF/adminheader.jsp" %>
 <table>
 <tr>
-<td><input type="button" onclick="window.location.href='AdminItems.jsp'" value ="View Items On Auction"></td>
-<td><input type="button" onclick="window.location.href='AdminUsers.jsp'" value ="View Users"></td>
+<td><a href="controller?action=adminitemspage">View Items On Auction</a></td>
 </tr>
 <tr>
-<td><font size = '4' color =red>Hello, adminastrator,<%=username%></font></td>
+<td><a href="controller?action=adminuserspage">View Users"</a></td>
 </tr>
 </table>
+<c:if test ="${msg!=null }">
 <br/><font size = '4' color =red><%=request.getAttribute("msg")%></font><br/>
+</c:if>
 <table width="80%" border="1">
 	<tr>
 		<th width="30%">Image</th>

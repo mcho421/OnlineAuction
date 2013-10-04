@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import jdbc.DBConnectionFactory;
 
 public class CommandHaltItem implements Command {
-	private static final String success = "/AdminItems.jsp";
+	private static final String success = "/controller?action=adminitemspage";
 	@Override
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException,
