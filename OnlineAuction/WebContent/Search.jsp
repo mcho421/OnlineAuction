@@ -10,8 +10,12 @@
 <title>Auction Site</title>
 </head>
 <body>
+<c:if test ="${admin != null }">
+<%@ include file="/WEB-INF/adminheader.jsp" %>
+</c:if>
+<c:if test ="${admin == null }">
 <%@ include file="/WEB-INF/header.jsp" %>
-
+</c:if>
 <h1>Search Results:</h1>
 <table width="80%" border="1">
 	<tr>

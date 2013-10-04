@@ -101,6 +101,13 @@ public class Controller extends HttpServlet {
 		}
 		return true;
 	}
+	public static boolean isAdmin(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("admin") == null) {
+			return false;
+		}
+		return true;
+	}
 
 	public static String getUsername(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();

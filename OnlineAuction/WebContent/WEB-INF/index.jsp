@@ -14,8 +14,12 @@ select id, category from Categories
 <title>Auction Site</title>
 </head>
 <body>
+<c:if test ="${admin != null }">
+<%@ include file="/WEB-INF/adminheader.jsp" %>
+</c:if>
+<c:if test ="${admin == null }">
 <%@ include file="/WEB-INF/header.jsp" %>
-
+</c:if>
 <h1>Welcome to the Auction Site!</h1>
 Search:
 <form name="search" action="controller" method="GET">
