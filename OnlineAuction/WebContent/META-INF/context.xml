@@ -4,7 +4,7 @@
           type="javax.sql.DataSource" username="postgres" password="1234"
           driverClassName="org.postgresql.Driver" 
           url="jdbc:postgresql://localhost:5432/test"
-          maxActive="8" maxIdle="4" maxWait="10000"></Resource>
+          maxActive="8" maxIdle="4" maxWait="10000" logAbandoned="true" removeAbandonedTimeout="5" removeAbandoned="true"></Resource>
   <Resource name="mail/Session" auth="Container"
             type="javax.mail.Session"
             mail.smtp.host="smtp.gmail.com"
@@ -14,5 +14,5 @@
             mail.smtp.starttls.enable="true"
             mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory" 
             mail.transport.protocol="smtp" 
-            mail.smtp.port="465"/>
+            mail.smtp.port="465"></Resource>
 </Context>
