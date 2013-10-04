@@ -44,7 +44,7 @@ public class DBConnectionFactory {
 		if(factory==null)
 			factory = new DBConnectionFactory();
 		Connection conn = factory.getDataSource().getConnection();
-		System.out.println("Got a database connection");
+//		System.out.println("Got a database connection");
 		
 		return conn;
 	}

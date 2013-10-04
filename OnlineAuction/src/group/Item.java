@@ -293,9 +293,9 @@ public static List<Item> search(Connection conn, String searchItem, int category
 	PreparedStatement st = null;
 	ResultSet rs = null;
 	try {
-		String sqlQuery = "select * from Items where title ILIKE ? AND closingtime > CURRENT_TIMESTAMP ORDER BY closingtime";
+		String sqlQuery = "select * from Items where title ILIKE ? AND halted = false ORDER BY closingtime";
 		if (category != 0)
-			sqlQuery = "select * from Items where title ILIKE ? AND category = ? AND closingtime > CURRENT_TIMESTAMP ORDER BY closingtime";
+			sqlQuery = "select * from Items where title ILIKE ? AND category = ? AND halted = false ORDER BY closingtime";
 		//doesnt work?
 		st = conn.prepareStatement(sqlQuery);
 		st.setString(1, "%" + searchItem + "%");
@@ -321,6 +321,58 @@ public static List<Item> search(Connection conn, String searchItem, int category
 	}
 	return result;
 }
+
+public static List<Item> getAuctionsFinishing(Connection conn, Timestamp time) throws SQLException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	List<Item> result = new ArrayList<Item>();
+	try {
+		String sqlQuery = "select * from Items where closingtime <= ? AND halted = false";
+		st = conn.prepareStatement(sqlQuery);
+		st.setTimestamp(1, time);
+		rs = st.executeQuery();
+		while (rs.next()) {
+			result.add(makeItem(rs));
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+	return result;
+}
+public boolean checkAndEndAuction(Connection conn) throws SQLException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	try {
+		String sqlQuery = "select * from Items where id = ? AND halted = false";
+		st = conn.prepareStatement(sqlQuery);
+		st.setInt(1, getId());
+		rs = st.executeQuery();
+		if (rs.next()) {
+			st.close();
+			rs.close();
+			sqlQuery = "UPDATE Items SET halted = true WHERE id = ?";
+			st = conn.prepareStatement(sqlQuery);
+			st.setInt(1, getId());
+			st.executeUpdate();
+		} else {
+			return false;
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+	return true;
+}
+
 private Hashtable<String, String> errors= new Hashtable<String, String>();
 public boolean validate() {
 	boolean okAll = true;
