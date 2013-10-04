@@ -293,9 +293,9 @@ public static List<Item> search(Connection conn, String searchItem, int category
 	PreparedStatement st = null;
 	ResultSet rs = null;
 	try {
-		String sqlQuery = "select * from Items where title ILIKE ?";
+		String sqlQuery = "select * from Items where title ILIKE ? AND closingtime > CURRENT_TIMESTAMP ORDER BY closingtime";
 		if (category != 0)
-			sqlQuery = "select * from Items where title ILIKE ? AND category = ? AND closingtime > CURRENT_TIMESTAMP";
+			sqlQuery = "select * from Items where title ILIKE ? AND category = ? AND closingtime > CURRENT_TIMESTAMP ORDER BY closingtime";
 		//doesnt work?
 		st = conn.prepareStatement(sqlQuery);
 		st.setString(1, "%" + searchItem + "%");
