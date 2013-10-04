@@ -78,7 +78,7 @@ function chk(lbl){
 </tr>
 <tr>
 <td>Bidding Increments</td>
-<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "bincre"value = "${Item.getBincre()}"/></td>
+<td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "bprice" value = "${Item.getBincre()}"/></td>
 <td><font color =red><%=Item.getErrorMsg("bprice") %></font></td>
 </tr>
 <tr>

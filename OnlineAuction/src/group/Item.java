@@ -415,7 +415,7 @@ public boolean validate() {
 		okAll = false;	
 			}
 	if(bincre <= 0 ) {
-		errors.put("iprice", "invalid price");
+		errors.put("bprice", "invalid price");
 		System.out.println("6");
 		okAll = false;
 	}

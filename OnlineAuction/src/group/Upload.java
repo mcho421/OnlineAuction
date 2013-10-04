@@ -75,19 +75,19 @@ public class Upload extends HttpServlet {
 			    } catch (FileUploadException e) {
 			     System.out.println(e.getMessage());
 			     newitem.setErrorMsg("picture", e.getMessage());
+			    	request.setAttribute("Item", newitem);
+			    	rd=request.getRequestDispatcher("/UploadImage.jsp");
+			    	rd.forward(request, response);
+			       return;
 			    }
 			   Iterator it = items.iterator();
 			   while(it.hasNext()){
 			    FileItem fileItem = (FileItem) it.next();
 			    if(!fileItem.isFormField()){   
 			     if(fileItem.getName()!=null && fileItem.getSize()!=0){
-
-			      //File fullFile = new File(fileItem.getName());
 			      long time = System.currentTimeMillis();
 			      String uploadtime = String.valueOf(time);
 			      File newFile = new File(imgDir, username+uploadtime+"-"+fileItem.getName());
-			      //to avoid user upload a same file mutiple times, add the upload time into new file name.
-//			      picture=path+"image\\" + username+fullFile.getName();
 			      System.out.println(newFile.getName());
 			      try {
 			        fileItem.write(newFile);
@@ -106,6 +106,13 @@ public class Upload extends HttpServlet {
 			       rd=request.getRequestDispatcher("/UploadImage.jsp");
 				   rd.forward(request, response);
 			      }
+			     }
+			     else {
+				    	newitem.setErrorMsg("picture", "please choose a picture for your item");
+				    	request.setAttribute("Item", newitem);
+				    	rd=request.getRequestDispatcher("/UploadImage.jsp");
+				    	rd.forward(request, response);
+				    	return;
 			     }
 			    }
 
