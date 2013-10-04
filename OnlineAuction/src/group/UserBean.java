@@ -422,8 +422,8 @@ public class UserBean {
 			if(rs.next()) {
 				int uid = rs.getInt(1);
 				String username = rs.getString(2);
-				HttpSession session = request.getSession();
-				session.setAttribute("username", username);
+				//HttpSession session = request.getSession();
+				//session.setAttribute("username", username);
 				UserBean user = new UserBean();
 				user.Initialize(username);
 				request.setAttribute("UserBean",user);
