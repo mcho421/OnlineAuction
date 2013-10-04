@@ -321,6 +321,30 @@ public static List<Item> search(Connection conn, String searchItem, int category
 	}
 	return result;
 }
+
+public static List<Item> getAuctionsFinishing(Connection conn, Timestamp time) throws SQLException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	List<Item> result = new ArrayList<Item>();
+	try {
+		String sqlQuery = "select * from Items where closingtime <= ? AND halted = false";
+		st = conn.prepareStatement(sqlQuery);
+		st.setTimestamp(1, time);
+		rs = st.executeQuery();
+		while (rs.next()) {
+			result.add(makeItem(rs));
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+	return result;
+}
+
 private Hashtable<String, String> errors= new Hashtable<String, String>();
 public boolean validate() {
 	boolean okAll = true;
