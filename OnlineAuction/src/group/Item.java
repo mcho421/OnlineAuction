@@ -348,36 +348,41 @@ public static List<Item> getAuctionsFinishing(Connection conn, Timestamp time) t
 private Hashtable<String, String> errors= new Hashtable<String, String>();
 public boolean validate() {
 	boolean okAll = true;
-	if (!title.matches("[0-9a-zA-Z ,!?.-]+")) {
-		errors.put("title","invalid input, only numbers, letters ',' '.' '!' '?' allowed");
-		System.out.println("1");
+	if(title == ""){
+		errors.put("title", "Enter Title");
+		okAll = false;
+		}
+	if(description == ""){
+		errors.put("description", "Enter Description");
 		okAll = false;
 		}
 	if(!title.matches("^\\W*(\\w+(\\W+|$)){1,10}$")){
-		errors.put("title","invalid input, 10 words max");
+		errors.put("title","invalid input, only words allowed, 10 words max");
 		okAll = false;
 	}
-	if(!description.matches("[0-9a-zA-Z ,!?.-]+")){
-	    errors.put("descrption", "invalid input, only numbers, letters ',' '.' '!' '?' allowed");
-	    System.out.println("2");
-	    okAll = false;
-	   }
+
+
 	if(!description.matches("^\\W*(\\w+(\\W+|$)){1,100}$")){
-		errors.put("description","invalid input, 100 words max");
+		errors.put("description","invalid input, only words allowed, 100 words max");
 		okAll = false;
 	}
+
 	if(!postage.matches("[0-9a-zA-Z ,!?.-]+")) {
 		errors.put("postage", "invalid input, only numbers, letters ',' '.' '!' '?' allowed");
 		System.out.println("3");
 		okAll = false;
 	}
-	if(rprice < 0) {
+	if(postage == ""){
+		errors.put("postage", "Enter Postage Details");
+		okAll = false;
+	}
+	if(rprice <= 0) {
 		errors.put("rprice", "invalid price");
 		System.out.println("4");
 		okAll = false;
 	}
 	if(sprice < 0){
-		errors.put("spri ce", "invalid price");
+		errors.put("sprice", "invalid price");
 		System.out.println("5");
 		okAll = false;	
 			}
@@ -392,7 +397,7 @@ public static boolean HaltItem(Connection conn, int id) {
 	PreparedStatement st = null;
 	try{
 		conn = DBConnectionFactory.getConnection();
-		st = conn.prepareStatement("UPDATE items SET closingtime = CURRENT_TIMESTAMP where id = ?");
+		st = conn.prepareStatement("UPDATE items SET halted = true where id = ?");
 		st.setInt(1, id);
         st.executeUpdate();
 		st.close();

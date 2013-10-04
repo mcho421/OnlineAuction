@@ -13,7 +13,7 @@
 <td><a href="controller?action=adminitemspage">View Items On Auction</a></td>
 </tr>
 <tr>
-<td><a href="controller?action=adminuserspage">View Users"</a></td>
+<td><a href="controller?action=adminuserspage">View Users</a></td>
 </tr>
 </table>
 </body>

@@ -32,51 +32,6 @@ function chk(lbl){
      }  
    }  
 }
-function on_submit()
- {
-  if (offeritem.title.value == "")
-    {
-     alert("Enter Title");
-     offeritem.title.focus();
-     return false;
-    }
-  if (offeritem.descrpition.value == "")
-  {
-   alert("Enter Descrpition");
-   offeritem.descrpition.focus();
-   return false;
-  }
-  if (offeritem.postage.value == "")
-  {
-   alert("Enter Postage Details");
-   offeritem.postage.focus();
-   return false;
-  }
-  if (offeritem.sprice.value == "")
-  {
-   alert("Enter Bidding Start Price");
-   offeritem.sprice.focus();
-   return false;
-  }
-  if (offeritem.rprice.value == "")
-  {
-   alert("Enter Reserve Price");
-   offeritem.rprice.focus();
-   return false;
-  }
-  if (offeritem.bincre.value == "")
-  {
-   alert("Enter Bidding Increments");
-   offeritem.bincre.focus();
-   return false;
-  }
-  if (offeritem.ctime.value == "")
-  {
-   alert("Enter Closing Time");
-   offeritem.ctime.focus();
-   return false;
-  }
- }
 </script>
 <body>
 <%@ include file="/WEB-INF/header.jsp" %>
@@ -104,7 +59,7 @@ function on_submit()
 <tr>
 <td>Descrpition</td>
 <td ><input style="width:500px;height:200px;" type = "text" name = "description"value="<%=Item.getDescription() %>" /></td>
-<td><font color =red><%=Item.getErrorMsg("descrption") %></font></td>
+<td><font color =red><%=Item.getErrorMsg("description") %></font></td>
 </tr>
 <tr>
 <td>Postage Details</td>
@@ -129,7 +84,7 @@ function on_submit()
 <tr>
 <td>Closing Time</td>
 <td><input type = "text" onkeypress = "chk(this)" style="width:500px;height:20px;" name = "closingtime" value = "10"/></td>
-<td><font color =red><%=Item.getErrorMsg("closingtime") %></font></td>
+<td><font color =red><%=Item.getErrorMsg("ctime") %></font></td>
 </tr>
 <tr>
 <td><input type = "submit" value = "Upload Picture"/></td>

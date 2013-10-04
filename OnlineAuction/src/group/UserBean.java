@@ -341,6 +341,7 @@ public class UserBean {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+
 		} finally {
 			if (st != null)
 				st.close();
@@ -376,6 +377,7 @@ public class UserBean {
 			st.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+
 		} finally {
 			if (st != null)
 				st.close();
@@ -479,7 +481,7 @@ public class UserBean {
 		ResultSet rs = null;
 		int s = 0;
 		try{
-			conn = DBConnectionFactory.getConnection();
+			//conn = DBConnectionFactory.getConnection();
 			st = conn.prepareStatement("select status from Users where username = ?");
 			st.setString(1, username);
 			rs = st.executeQuery();
@@ -496,7 +498,7 @@ public class UserBean {
 	public static boolean BanUser(Connection conn, int id) {
 		PreparedStatement st = null;
 		try{
-			conn = DBConnectionFactory.getConnection();
+			//conn = DBConnectionFactory.getConnection();
 			st = conn.prepareStatement("UPDATE users SET status = '1' where id = ?");
 			st.setInt(1, id);
 	        st.executeUpdate();
