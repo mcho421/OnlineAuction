@@ -221,7 +221,7 @@ public void Insert(String username) {
 		rs.close();
 		sqlQuery = "INSERT INTO items( title, category, picturepath, description, postagedetails,"+
                           "reserveprice, biddingstartprice, biddingincrements, closingtime,"+
-                          "seller) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                          "seller, halted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement pres = conn.prepareStatement(sqlQuery);
 		pres.setString(1, this.title);
 		pres.setInt(2, this.category);
@@ -368,7 +368,7 @@ public static boolean HaltItem(Connection conn, int id) {
 	PreparedStatement st = null;
 	try{
 		conn = DBConnectionFactory.getConnection();
-		st = conn.prepareStatement("UPDATE items SET closingtime = CURRENT_TIMESTAMP where id = ?");
+		st = conn.prepareStatement("UPDATE items SET halted = true where id = ?");
 		st.setInt(1, id);
         st.executeUpdate();
 		st.close();

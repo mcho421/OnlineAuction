@@ -353,18 +353,9 @@ public class UserBean {
 		}  finally{
 			if(st!=null) st.close();
 			if(rs!=null) rs.close();
-			if(conn!=null) 
-			{
-			try {
-				conn.close();
-				System.out.println("conn closed");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
 			}
-			
-			}
-		}
+		
 		return true;
 	}
 	
@@ -397,18 +388,8 @@ public class UserBean {
 		}  finally{
 			if(st!=null) st.close();
 			if(rs!=null) rs.close();
-			if(conn!=null) 
-			{
-			try {
-				conn.close();
-				System.out.println("conn closed");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			}
-		}
 	}
 	
 	public void updateDatabase(Connection conn) throws SQLException {
@@ -432,18 +413,8 @@ public class UserBean {
 		}  finally{
 			if(st!=null) st.close();
 			//if(rs!=null) rs.close();
-			if(conn!=null) 
-			{
-			try {
-				conn.close();
-				System.out.println("conn closed");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			}
-		}
 	}
 
 	public static boolean login(Connection conn, HttpServletRequest request, String un, String pw) throws SQLException {
@@ -474,17 +445,6 @@ public class UserBean {
 		}  finally{
 			if(st!=null) st.close();
 			if(rs!=null) rs.close();
-			if(conn!=null) 
-			{
-			try {
-				conn.close();
-				System.out.println("conn closed");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			}
 		}
 		return false;
 	}
@@ -516,17 +476,6 @@ public class UserBean {
 		} finally{
 			if(st!=null) st.close();
 			if(rs!=null) rs.close();
-			if(conn!=null) 
-			{
-			try {
-				conn.close();
-				System.out.println("conn closed");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			}
 		}
 		return true;
 	}
@@ -535,7 +484,7 @@ public class UserBean {
 		ResultSet rs = null;
 		int s = 0;
 		try{
-			conn = DBConnectionFactory.getConnection();
+			//conn = DBConnectionFactory.getConnection();
 			st = conn.prepareStatement("select status from Users where username = ?");
 			st.setString(1, username);
 			rs = st.executeQuery();
@@ -603,19 +552,7 @@ public class UserBean {
 			rs.close();
 			} catch (Exception e) {
 			e.printStackTrace();
-		}  finally{
-			if(conn!=null) 
-			{
-			try {
-				conn.close();
-				System.out.println("conn closed");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			}
-		}
+		} 
 		return confirmed;
 	}
 	

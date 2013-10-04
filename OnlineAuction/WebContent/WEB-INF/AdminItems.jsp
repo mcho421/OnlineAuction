@@ -28,8 +28,9 @@ Object username=session.getAttribute("username");
 	<tr>
 		<th width="30%">Image</th>
 		<th width="25%">Item</th>
-		<th width="10%">Reserve Price</th>
-		<th width="20%">Closing time</th>
+		<th width="8%">Reserve Price</th>
+		<th width="17%">Closing time</th>
+		<th width="5%">Halted</th>
 		<th width="15%">Halt</th>
 	</tr>
 	<c:forEach var="row" items="${rs.rows}">
@@ -40,8 +41,9 @@ Object username=session.getAttribute("username");
 			    </c:if>
 			</td>
 			<td width="25%"><b>${row.title}</b><br>${row.description}</td>
-			<td width="10%">$ ${row.reserveprice}</td>
-			<td width="20%" >${row.closingtime}</td>
+			<td width="8%">$ ${row.reserveprice}</td>
+			<td width="17%" >${row.closingtime}</td>
+			<td width="5%"> ${row.halted }</td>
 			<td width="15%"><a href="controller?action=haltitem&itemid=${row.id}"><b>Halt It!</b></a></td>
 		</tr>
 	</c:forEach>
