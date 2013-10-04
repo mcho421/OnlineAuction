@@ -100,6 +100,7 @@ class DatabasePollerWorker implements Runnable {
 	private void auctionFinished(Connection conn, Item item) throws SQLException {
 		Item.updateCurrentBid(conn, item);
 		UserBean owner = UserBean.initializeFromId(conn, item.getSeller());
+		UserBean buyer = null;
 		if (item.getCurrentBidder() == 0) {
 			// no bidders
 			System.out.println("No bidders on item: "+item.getTitle());
@@ -109,22 +110,49 @@ class DatabasePollerWorker implements Runnable {
 				text.append("There were no bids on item:\n");
 				text.append(item.getTitle());
 				text.append("\nBetter luck next time!\n");
-				mail.sendMessage(owner.getUseremail(), "Auction Finished: '"+item.getTitle()+"'", text);
-			} catch (exceptions.ServiceLocatorException e) {
-				e.printStackTrace();
-			} catch (exceptions.MailSenderException e) {
-				e.printStackTrace();
-			} catch (AddressException e) {
-				e.printStackTrace();
-			} catch (MessagingException e) {
+				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else if (item.getCurrentBiddingPrice() >= item.getRprice()) {
 			// send user and owner message
 			System.out.println("Winning bid more than reserve: "+item.getTitle());
+			buyer = UserBean.initializeFromId(conn, item.getCurrentBidder());
+			try {
+				MailSenderService mail = MailSenderService.getMailSender();
+				StringBuffer text = new StringBuffer();
+				text.append("Congratulations! The winning bid exceeds the reserve price on item:\n");
+				text.append(item.getTitle());
+				text.append("\nThe winning bid:\n");
+				text.append(item.getCurrentBiddingPrice());
+				text.append("\nThe buyer's details are:\n");
+				text.append("Name: "+buyer.getFname() + " " + buyer.getLname()+"\n");
+				text.append("Email: "+buyer.getUseremail()+"\n");
+				text.append("Credit Card: "+buyer.getCreditcard()+"\n");
+				text.append("Address: "+buyer.getFulladdress()+"\n");
+				text.append("\nPlease contact the buyer and send the item\n");
+				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				MailSenderService mail = MailSenderService.getMailSender();
+				StringBuffer text = new StringBuffer();
+				text.append("Congratulations! You are the winning bid on item:\n");
+				text.append(item.getTitle());
+				text.append("\nYour winning bid:\n");
+				text.append(item.getCurrentBiddingPrice());
+				text.append("\nThe sellers's details are:\n");
+				text.append("Email: "+owner.getUseremail()+"\n");
+				text.append("\nPlease contact the seller for further enquiries\n");
+				mail.sendMessage(buyer.getUseremail(), "You are the winning bid on: '"+item.getTitle()+"'", text);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			// send user message and item owner needs to accept or reject
 			System.out.println("Winning bid less than reserve: "+item.getTitle());
+			buyer = UserBean.initializeFromId(conn, item.getCurrentBidder());
 		}
 	}
 	

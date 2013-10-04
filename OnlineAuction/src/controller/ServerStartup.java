@@ -4,6 +4,8 @@ import group.DatabasePoller;
 
 import javax.servlet.ServletContextEvent;
 
+import jdbc.MailSenderService;
+
 public class ServerStartup implements javax.servlet.ServletContextListener {
 
 	@Override
@@ -17,7 +19,6 @@ public class ServerStartup implements javax.servlet.ServletContextListener {
 		// TODO Auto-generated method stub
 		System.out.println("Executing startup code...");
 		(new Thread(new DatabasePoller())).start();
-		
 	}
 
 }

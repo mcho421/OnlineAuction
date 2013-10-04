@@ -37,7 +37,7 @@ Object username=session.getAttribute("username");
 		<tr>
 			<td width="30%">
 				<c:if test="${row.picturePath != null}">
-						<img src="ImageServlet?image=${r.picturePath}" style="max-width: 200px; max-height: 200px;">
+						<img src="ImageServlet?image=${row.picturePath}" style="max-width: 200px; max-height: 200px;">
 			    </c:if>
 			</td>
 			<td width="25%"><b>${row.title}</b><br>${row.description}</td>
