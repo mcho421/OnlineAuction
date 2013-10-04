@@ -27,6 +27,7 @@ private int bincre;
 private int currentBiddingPrice;
 private Timestamp ctime = new Timestamp(System.currentTimeMillis());
 private int seller;
+private int currentBidder;
 
 public int getId() {
 	return id;
@@ -106,6 +107,13 @@ public void setCurrentBiddingPrice(int currentBiddingPrice) {
 public int getCurrentBiddingPrice() {
 	return currentBiddingPrice;
 }
+public void setCurrentBidder(int currentBidder) {
+	this.currentBidder = currentBidder;
+}
+public int getCurrentBidder() {
+	return currentBidder;
+}
+
 public int getMinimumBid() {
 	return getCurrentBiddingPrice() + getBincre();
 }
@@ -241,13 +249,15 @@ public static void updateCurrentBid(Connection conn, Item i) throws SQLException
 	PreparedStatement st = null;
 	ResultSet rs = null;
 	try {
-		String sqlQuery = "select max(bid) from Bids where item = ? group by item";
+//		String sqlQuery = "select max(bid) from Bids where item = ? group by item";
+		String sqlQuery = "select bidder, bid from Bids where bid in (select max(bid) from bids where item = ?)";
 		st = conn.prepareStatement(sqlQuery);
 		st.setInt(1, i.getId());
 		rs = st.executeQuery();
 		if (rs.next()) {
 			System.out.println("has bidder");
-			i.setCurrentBiddingPrice(rs.getInt(1));
+			i.setCurrentBidder(rs.getInt(1));
+			i.setCurrentBiddingPrice(rs.getInt(2));
 		} else {
 			System.out.println("no bidder");
 			i.setCurrentBiddingPrice(i.getSprice());
