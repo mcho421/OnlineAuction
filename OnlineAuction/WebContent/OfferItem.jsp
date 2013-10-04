@@ -59,7 +59,7 @@ function chk(lbl){
 <tr>
 <td>Descrpition</td>
 <td ><input style="width:500px;height:200px;" type = "text" name = "description"value="<%=Item.getDescription() %>" /></td>
-<td><font color =red><%=Item.getErrorMsg("descrption") %></font></td>
+<td><font color =red><%=Item.getErrorMsg("description") %></font></td>
 </tr>
 <tr>
 <td>Postage Details</td>

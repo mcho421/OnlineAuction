@@ -44,21 +44,6 @@ public class CommandOfferItem implements Command {
 		String rprice = request.getParameter("rprice");
 		String sprice = request.getParameter("sprice");
 		String bprice = request.getParameter("rprice");
-		if(newitem.getTitle() == ""){
-			newitem.setErrorMsg("title", "Enter Title");
-			request.setAttribute("Item", newitem);
-			return invalid;
-			}
-		if(newitem.getDescription() == ""){
-			newitem.setErrorMsg("description", "Enter Description");
-			request.setAttribute("Item", newitem);
-			return invalid;
-			}
-		if(newitem.getPostage() == ""){
-		newitem.setErrorMsg("postage", "Enter Postage Details");
-		request.setAttribute("Item", newitem);
-		return invalid;
-		}
 		if(sprice == ""){
 			newitem.setErrorMsg("sprice", "Enter Bidding Start Price");
 			request.setAttribute("Item", newitem);

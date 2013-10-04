@@ -324,27 +324,32 @@ public static List<Item> search(Connection conn, String searchItem, int category
 private Hashtable<String, String> errors= new Hashtable<String, String>();
 public boolean validate() {
 	boolean okAll = true;
-	if (!title.matches("[0-9a-zA-Z ,!?.-]+")) {
-		errors.put("title","invalid input, only numbers, letters ',' '.' '!' '?' allowed");
-		System.out.println("1");
+	if(title == ""){
+		errors.put("title", "Enter Title");
+		okAll = false;
+		}
+	if(description == ""){
+		errors.put("description", "Enter Description");
 		okAll = false;
 		}
 	if(!title.matches("^\\W*(\\w+(\\W+|$)){1,10}$")){
-		errors.put("title","invalid input, 10 words max");
+		errors.put("title","invalid input, only words allowed, 10 words max");
 		okAll = false;
 	}
-	if(!description.matches("[0-9a-zA-Z ,!?.-]+")){
-	    errors.put("descrption", "invalid input, only numbers, letters ',' '.' '!' '?' allowed");
-	    System.out.println("2");
-	    okAll = false;
-	   }
+
+
 	if(!description.matches("^\\W*(\\w+(\\W+|$)){1,100}$")){
-		errors.put("description","invalid input, 100 words max");
+		errors.put("description","invalid input, only words allowed, 100 words max");
 		okAll = false;
 	}
+
 	if(!postage.matches("[0-9a-zA-Z ,!?.-]+")) {
 		errors.put("postage", "invalid input, only numbers, letters ',' '.' '!' '?' allowed");
 		System.out.println("3");
+		okAll = false;
+	}
+	if(postage == ""){
+		errors.put("postage", "Enter Postage Details");
 		okAll = false;
 	}
 	if(rprice <= 0) {
