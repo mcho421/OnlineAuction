@@ -44,13 +44,28 @@ public class CommandOfferItem implements Command {
 		String rprice = request.getParameter("rprice");
 		String sprice = request.getParameter("sprice");
 		String bprice = request.getParameter("rprice");
+		if(rprice == ""){
+		newitem.setErrorMsg("rprice", "Enter Reserve Price");
+		request.setAttribute("Item", newitem);
+		return invalid;
+		}
+		if(sprice == ""){
+			newitem.setErrorMsg("sprice", "Enter Bidding Start Price");
+			request.setAttribute("Item", newitem);
+			return invalid;
+			}
+		if(bprice == ""){
+			newitem.setErrorMsg("rprice", "Enter Bidding Increments");
+			request.setAttribute("Item", newitem);
+			return invalid;
+			}
 		newitem.setRprice(Integer.parseInt(rprice));
 		newitem.setSprice(Integer.parseInt(sprice));
 		newitem.setBincre(Integer.parseInt(bprice));
 		int ctime = Integer.parseInt(request.getParameter("closingtime"));
 		if(ctime < 3 || ctime > 60){
 			newitem.setErrorMsg("ctime", "closing time ranges from 3 min to 60 min");
-			session.setAttribute("Item", newitem);
+			request.setAttribute("Item", newitem);
 			return invalid;
 		}
 		if(ctime>=3 && ctime<=60){

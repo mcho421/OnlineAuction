@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <sql:query var="rs" dataSource="jdbc/database">
-SELECT * FROM items  where closingtime > CURRENT_TIMESTAMP
+SELECT * FROM items where closingtime > CURRENT_TIMESTAMP
 </sql:query>
 <% 
 Object username=session.getAttribute("username"); 
@@ -18,7 +18,7 @@ Object username=session.getAttribute("username");
 <td><a href="controller?action=adminitemspage">View Items On Auction</a></td>
 </tr>
 <tr>
-<td><a href="controller?action=adminuserspage">View Users"</a></td>
+<td><a href="controller?action=adminuserspage">View Users</a></td>
 </tr>
 </table>
 <c:if test ="${msg!=null }">

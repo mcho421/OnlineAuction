@@ -221,7 +221,7 @@ public void Insert(String username) {
 		rs.close();
 		sqlQuery = "INSERT INTO items( title, category, picturepath, description, postagedetails,"+
                           "reserveprice, biddingstartprice, biddingincrements, closingtime,"+
-                          "seller, halted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                          "seller) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement pres = conn.prepareStatement(sqlQuery);
 		pres.setString(1, this.title);
 		pres.setInt(2, this.category);
@@ -347,13 +347,13 @@ public boolean validate() {
 		System.out.println("3");
 		okAll = false;
 	}
-	if(rprice < 0) {
+	if(rprice <= 0) {
 		errors.put("rprice", "invalid price");
 		System.out.println("4");
 		okAll = false;
 	}
 	if(sprice < 0){
-		errors.put("spri ce", "invalid price");
+		errors.put("sprice", "invalid price");
 		System.out.println("5");
 		okAll = false;	
 			}
