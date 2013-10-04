@@ -109,6 +109,15 @@ public int getCurrentBiddingPrice() {
 public int getMinimumBid() {
 	return getCurrentBiddingPrice() + getBincre();
 }
+public boolean isClosed() {
+    Timestamp now = new Timestamp(System.currentTimeMillis());
+	long milliseconds1 = now.getTime();
+    long milliseconds2 = getCtime().getTime();
+    if (milliseconds1 > milliseconds2) {
+    	return true;
+    }
+	return false;
+}
 public String getTimeLeft() {
     Timestamp now = new Timestamp(System.currentTimeMillis());
 	long milliseconds1 = now.getTime();
