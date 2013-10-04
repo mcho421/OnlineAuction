@@ -107,6 +107,10 @@ class DatabasePollerWorker implements Runnable {
 			try {
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
+				//Send msg
+				Message.sendMsg("There were no bids on item:"+item.getTitle()+"Better luck next time!", item.getSeller());
+				System.out.println("msg sent");
+				
 				text.append("There were no bids on item:\n");
 				text.append(item.getTitle());
 				text.append("\nBetter luck next time!\n");
@@ -119,6 +123,10 @@ class DatabasePollerWorker implements Runnable {
 			System.out.println("Winning bid more than reserve: "+item.getTitle());
 			buyer = UserBean.initializeFromId(conn, item.getCurrentBidder());
 			try {
+				//send msg
+				Message.sendMsg("Congratulations! The winning bid exceeds the reserve price on item:"+item.getTitle(), item.getSeller());
+				System.out.println("msg sent");
+				
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
 				text.append("Congratulations! The winning bid exceeds the reserve price on item:\n");
@@ -132,10 +140,15 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Address: "+buyer.getFulladdress()+"\n");
 				text.append("\nPlease contact the buyer and send the item\n");
 				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
+				System.out.println("sent 1");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
+				//send msg
+				Message.sendMsg("Congratulations! You are the winning bid on item:"+item.getTitle(), buyer.getUsername());
+				System.out.println("msg sent");
+				
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
 				text.append("Congratulations! You are the winning bid on item:\n");
@@ -146,6 +159,7 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Email: "+owner.getUseremail()+"\n");
 				text.append("\nPlease contact the seller for further enquiries\n");
 				mail.sendMessage(buyer.getUseremail(), "You are the winning bid on: '"+item.getTitle()+"'", text);
+				System.out.println("sent 2");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
