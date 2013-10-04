@@ -171,6 +171,29 @@ public class UserBean {
 		}
 		return user;
 	}
+	public static UserBean initializeFromId(Connection conn, int id) throws SQLException {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		UserBean user = new UserBean();
+		try {
+			String sqlQuery = "SELECT * FROM Users WHERE id = ?";
+			st = conn.prepareStatement(sqlQuery);
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			if (rs.next()){
+				user = makeUser(rs);
+			} else {
+				System.out.println("Username "+id+" not found.");
+				throw new SQLException();
+			}
+		} finally {
+			if (st != null)
+				st.close();
+			if (rs != null)
+				rs.close();
+		}
+		return user;
+	}
 	private static UserBean makeUser(ResultSet rs) throws SQLException {
 		UserBean user = new UserBean();
 		user.setUserid(rs.getInt(1));

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import jdbc.DBConnectionFactory;
 import jdbc.MailSender;
+import jdbc.MailSenderService;
 
 public class CommandRegister implements Command {
 	
@@ -84,7 +85,8 @@ public class CommandRegister implements Command {
 
 		// send email
 		try {
-			MailSender mail = MailSender.getMailSender();
+//			MailSender mail = MailSender.getMailSender();
+			MailSenderService mail = MailSenderService.getMailSender();
 			StringBuffer sbuffer = new StringBuffer();
 			sbuffer.append("Complete your registration:\n");
 			String link = request.getScheme() + "://"

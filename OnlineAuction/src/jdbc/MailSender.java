@@ -33,7 +33,7 @@ public class MailSender{
 	 * @throws MailSenderException
 	 * @throws ServiceLocatorException
 	 */	
-	private MailSender() throws MailSenderException, ServiceLocatorException{ 
+	public MailSender() throws MailSenderException, ServiceLocatorException{ 
 		try{
 			ctx = new InitialContext();
 			Context envContext = (Context) ctx.lookup("java:comp/env");
