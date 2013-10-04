@@ -55,6 +55,7 @@ public class CommandConfirmBid implements Command {
 
 		String username = Controller.getUsername(request, response);
 		UserBean user = new UserBean();
+		boolean hasPrevBidder = false;
 		UserBean prevBidder = new UserBean();
 		int oldPrice = 0;
 		Bid bid = new Bid();
@@ -81,7 +82,10 @@ public class CommandConfirmBid implements Command {
 				request.setAttribute("errorMsg", "Bid is lower than minimum bid");
 				return error;
 			}
-			prevBidder = UserBean.initializeFromId(conn, item.getCurrentBidder());
+			if (item.getCurrentBidder() != 0) {
+				hasPrevBidder = true;
+				prevBidder = UserBean.initializeFromId(conn, item.getCurrentBidder());
+			}
 			bid.insert(conn);
 
 			conn.commit();
@@ -96,7 +100,7 @@ public class CommandConfirmBid implements Command {
 		}
 		
 		// send email
-		if (user.getUserid() != prevBidder.getUserid()) {
+		if (hasPrevBidder && (user.getUserid() != prevBidder.getUserid())) {
 			try {
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
