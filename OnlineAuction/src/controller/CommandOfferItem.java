@@ -43,7 +43,7 @@ public class CommandOfferItem implements Command {
 		newitem.setPostage(request.getParameter("postage"));
 		String rprice = request.getParameter("rprice");
 		String sprice = request.getParameter("sprice");
-		String bprice = request.getParameter("rprice");
+		String bprice = request.getParameter("bprice");
 		if(sprice == ""){
 			newitem.setErrorMsg("sprice", "Enter Bidding Start Price");
 			request.setAttribute("Item", newitem);

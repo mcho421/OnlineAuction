@@ -502,6 +502,10 @@ public class UserBean {
 			st = conn.prepareStatement("UPDATE users SET status = '1' where id = ?");
 			st.setInt(1, id);
 	        st.executeUpdate();
+	        st.close();
+	        st = conn.prepareStatement("UPDATE items SET halted ='true' where seller= ?");
+			st.setInt(1, id);
+	        st.executeUpdate();
 			st.close();
 			return true;
 			} catch (Exception e) {
