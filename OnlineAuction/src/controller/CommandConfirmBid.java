@@ -4,6 +4,7 @@ import exceptions.MailSenderException;
 import exceptions.ServiceLocatorException;
 import group.Bid;
 import group.Item;
+import group.Message;
 import group.UserBean;
 
 import java.io.IOException;
@@ -104,6 +105,9 @@ public class CommandConfirmBid implements Command {
 		// send email
 		if (hasPrevBidder && (user.getUserid() != prevBidder.getUserid())) {
 			try {
+				//send msg
+				Message.sendMsg("You have been outbidden on item:"+item.getTitle(), user.getUsername());
+				
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
 				text.append("You have been outbidden on item:\n");
@@ -133,6 +137,9 @@ public class CommandConfirmBid implements Command {
 			}
 		}
 		try {
+			//send msg
+			Message.sendMsg("You have successfully made a bid on the item:"+item.getTitle(), user.getUsername());
+			
 			MailSenderService mail = MailSenderService.getMailSender();
 			StringBuffer text = new StringBuffer();
 			text.append("You have successfully made a bid on the item:\n");
