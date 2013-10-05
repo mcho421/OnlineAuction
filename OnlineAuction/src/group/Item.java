@@ -23,7 +23,7 @@ private String description="";
 private String postage="";
 private int rprice;
 private int sprice;
-private int bincre;
+private int bincre = 1;
 private int currentBiddingPrice;
 private Timestamp ctime = new Timestamp(System.currentTimeMillis());
 private boolean halted;
