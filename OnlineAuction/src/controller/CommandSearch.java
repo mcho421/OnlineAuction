@@ -28,6 +28,10 @@ public class CommandSearch implements Command {
 			HttpServletResponse response) throws ServletException, IOException, SQLException {
 		String searchItem = request.getParameter("item");
 		String category = request.getParameter("category");
+		String showHaltedString = request.getParameter("showHalted");
+		boolean showHalted = false;
+		if (showHaltedString != null)
+			showHalted = true;
 		System.out.println("search: "+searchItem);
 		System.out.println("category: "+category);
 		if (searchItem == null)
@@ -43,7 +47,7 @@ public class CommandSearch implements Command {
 		Connection conn = null;
 		try {
 			conn = DBConnectionFactory.getConnection();
-			result = Item.search(conn, searchItem, catNumber);
+			result = Item.search(conn, searchItem, catNumber, showHalted);
 			for (Item i : result) {
 				System.out.println(i.getTitle());
 			}

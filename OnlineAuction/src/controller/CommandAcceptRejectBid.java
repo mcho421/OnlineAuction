@@ -156,6 +156,7 @@ public class CommandAcceptRejectBid implements Command {
 					e.printStackTrace();
 				}
 			}
+			Item.accept(conn, item.getId());
 			//conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();

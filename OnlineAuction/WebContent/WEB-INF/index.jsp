@@ -36,6 +36,7 @@ Search:
 			</select>
 		</td>
 		<td><input type="submit" name="submitSearch" value="Submit"></td>
+		<td><input type="checkbox" name="showHalted">Show Halted<br></td>
 	</tr>
 	</table>
 </form>

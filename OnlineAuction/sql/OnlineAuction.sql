@@ -38,6 +38,7 @@ CREATE TABLE items
   closingtime timestamp without time zone NOT NULL,
   seller integer NOT NULL,
   halted boolean DEFAULT false,
+  accepted boolean NOT NULL default false,
   CONSTRAINT items_pkey PRIMARY KEY (id),
   CONSTRAINT items_category_fkey FOREIGN KEY (category)
       REFERENCES categories (id) MATCH SIMPLE
