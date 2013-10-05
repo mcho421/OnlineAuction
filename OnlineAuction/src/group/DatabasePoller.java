@@ -14,6 +14,9 @@ import java.util.concurrent.Executors;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.servlet.ServletContext;
+
+import controller.Controller;
 
 import jdbc.DBConnectionFactory;
 import jdbc.MailSenderService;
@@ -113,6 +116,8 @@ class DatabasePollerWorker implements Runnable {
 				
 				text.append("There were no bids on item:\n");
 				text.append(item.getTitle());
+				text.append("\nLink to auction:\n");
+				text.append(Controller.getBaseUrl()+"controller?action=itemPage&item="+item.getId());
 				text.append("\nBetter luck next time!\n");
 				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
 			} catch (Exception e) {
@@ -138,6 +143,8 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Email: "+buyer.getUseremail()+"\n");
 				text.append("Credit Card: "+buyer.getCreditcard()+"\n");
 				text.append("Address: "+buyer.getFulladdress()+"\n");
+				text.append("\nLink to auction:\n");
+				text.append(Controller.getBaseUrl()+"controller?action=itemPage&item="+item.getId());
 				text.append("\nPlease contact the buyer and send the item\n");
 				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
 				System.out.println("sent 1");
@@ -157,6 +164,8 @@ class DatabasePollerWorker implements Runnable {
 				text.append("$"+item.getCurrentBiddingPrice());
 				text.append("\nThe sellers's details are:\n");
 				text.append("Email: "+owner.getUseremail()+"\n");
+				text.append("\nLink to auction:\n");
+				text.append(Controller.getBaseUrl()+"controller?action=itemPage&item="+item.getId());
 				text.append("\nPlease contact the seller for further enquiries\n");
 				mail.sendMessage(buyer.getUseremail(), "You are the winning bid on: '"+item.getTitle()+"'", text);
 				System.out.println("sent 2");
@@ -181,6 +190,8 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Email: "+buyer.getUseremail()+"\n");
 				text.append("Credit Card: "+buyer.getCreditcard()+"\n");
 				text.append("Address: "+buyer.getFulladdress()+"\n");
+				text.append("\nLink to auction:\n");
+				text.append(Controller.getBaseUrl()+"controller?action=itemPage&item="+item.getId());
 				text.append("\nPlease log into your account to accept or reject the bid\n");
 				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
 			} catch (Exception e) {
@@ -197,6 +208,8 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Email: "+owner.getUseremail()+"\n");
 				text.append("\nThe buyer has the right to reject this bid\n");
 				text.append("\nPlease await contact from the seller\n");
+				text.append("\nLink to auction:\n");
+				text.append(Controller.getBaseUrl()+"controller?action=itemPage&item="+item.getId());
 				mail.sendMessage(buyer.getUseremail(), "You are the winning bid on: '"+item.getTitle()+"'", text);
 			} catch (Exception e) {
 				e.printStackTrace();

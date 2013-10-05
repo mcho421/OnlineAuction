@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -124,6 +125,10 @@ public class Controller extends HttpServlet {
 	public static void invalidateSession(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		session.invalidate();
+	}
+	
+	public static String getBaseUrl() {
+		return "http://localhost:8080/OnlineAuction/";
 	}
 
 }
