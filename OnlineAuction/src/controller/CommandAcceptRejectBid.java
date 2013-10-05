@@ -4,6 +4,7 @@ import exceptions.MailSenderException;
 import exceptions.ServiceLocatorException;
 import group.Bid;
 import group.Item;
+import group.Message;
 import group.UserBean;
 
 import java.io.IOException;
@@ -90,6 +91,9 @@ public class CommandAcceptRejectBid implements Command {
 			if (accept == true) {
 				System.out.println("ACCEPTING BID");
 				try {
+					//send msg
+					Message.sendMsg("You have accepted the bid on the item:"+item.getTitle(), user.getUsername());
+					
 					MailSenderService mail = MailSenderService.getMailSender();
 					StringBuffer text = new StringBuffer();
 					text.append("You have accepted the bid on the item:\n");
@@ -106,6 +110,9 @@ public class CommandAcceptRejectBid implements Command {
 					e.printStackTrace();
 				}
 				try {
+					//send msg
+					Message.sendMsg("Your bid has been accepted on the item:"+item.getTitle(), user.getUsername());
+					
 					MailSenderService mail = MailSenderService.getMailSender();
 					StringBuffer text = new StringBuffer();
 					text.append("Your bid has been accepted on the item:\n");
@@ -124,6 +131,9 @@ public class CommandAcceptRejectBid implements Command {
 			} else {
 				System.out.println("REJECTING BID");
 				try {
+					//send msg
+					Message.sendMsg("You have rejected the bid on the item:"+item.getTitle(), user.getUsername());
+					
 					MailSenderService mail = MailSenderService.getMailSender();
 					StringBuffer text = new StringBuffer();
 					text.append("You have rejected the bid on the item:\n");
@@ -140,6 +150,9 @@ public class CommandAcceptRejectBid implements Command {
 					e.printStackTrace();
 				}
 				try {
+					//send msg
+					Message.sendMsg("Your bid has been rejected on the item:"+item.getTitle(), user.getUsername());
+					
 					MailSenderService mail = MailSenderService.getMailSender();
 					StringBuffer text = new StringBuffer();
 					text.append("Your bid has been rejected on the item:\n");

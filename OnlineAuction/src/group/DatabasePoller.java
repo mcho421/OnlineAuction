@@ -176,6 +176,10 @@ class DatabasePollerWorker implements Runnable {
 			// send user message and item owner needs to accept or reject
 			System.out.println("Winning bid less than reserve: "+item.getTitle());
 			buyer = UserBean.initializeFromId(conn, item.getCurrentBidder());
+			//send msg
+			Message.sendMsg("Winning bid less than reserve: "+item.getTitle(), owner.getUsername());
+			System.out.println("msg sent");
+			
 			try {
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
@@ -198,6 +202,10 @@ class DatabasePollerWorker implements Runnable {
 				e.printStackTrace();
 			}
 			try {
+				//send msg
+				Message.sendMsg("You are the winning bid on item, but the bid is lower than the reserve price"+item.getTitle(), buyer.getUsername());
+				System.out.println("msg sent");
+				
 				MailSenderService mail = MailSenderService.getMailSender();
 				StringBuffer text = new StringBuffer();
 				text.append("You are the winning bid on item, but the bid is lower than the reserve price\n");
