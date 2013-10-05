@@ -30,6 +30,7 @@ private boolean halted;
 private int seller;
 private int currentBidder;
 private int currentBidId;
+private boolean accepted = false;
 
 public int getId() {
 	return id;
@@ -127,6 +128,12 @@ public void setHalted(boolean halted) {
 public boolean getHalted() {
 	return halted;
 }
+public void setAccepted(boolean accepted) {
+	this.accepted = accepted;
+}
+public boolean getAccepted() {
+	return accepted;
+}
 
 public int getMinimumBid() {
 	return getCurrentBiddingPrice() + getBincre();
@@ -173,6 +180,8 @@ public boolean canAcceptReject(Connection conn, String username) throws SQLExcep
 	if (getCurrentBidId() == 0)
 		return false;
 	if (getCurrentBiddingPrice() >= getRprice())
+		return false;
+	if (getAccepted() == true)
 		return false;
 	PreparedStatement st = null;
 	ResultSet rs = null;
@@ -312,6 +321,25 @@ public static void updateCurrentBid(Connection conn, Item i) throws SQLException
 			rs.close();
 	}
 }
+public static void accept(Connection conn, int id) throws SQLException {
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	try {
+		conn = DBConnectionFactory.getConnection();
+		st = conn.prepareStatement("UPDATE Items SET accepted=TRUE where id=?");
+		st.setInt(1, id);
+		st.executeUpdate();
+	} catch (ServiceLocatorException e) {
+		e.printStackTrace();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} finally {
+		if (st != null)
+			st.close();
+		if (rs != null)
+			rs.close();
+	}
+}
 
 private static Item makeItem(ResultSet rs) throws SQLException {
 	Item item = new Item();
@@ -327,14 +355,19 @@ private static Item makeItem(ResultSet rs) throws SQLException {
 	item.setBincre(rs.getInt(10));
 	item.setCtime(rs.getTimestamp(11));
 	item.setSeller(rs.getInt(12));
+	item.setHalted(rs.getBoolean(13));
+	item.setAccepted(rs.getBoolean(14));
 	return item;
 }
-public static List<Item> search(Connection conn, String searchItem, int category) throws SQLException {
+public static List<Item> search(Connection conn, String searchItem, int category, boolean showHalted) throws SQLException {
 	List<Item> result = new ArrayList<Item>();
 	PreparedStatement st = null;
 	ResultSet rs = null;
 	try {
-		String sqlQuery = "select * from Items where title ILIKE ? AND halted = false ORDER BY closingtime";
+		String haltString = "AND halted = false";
+		if (showHalted == true)
+			haltString = "";
+		String sqlQuery = "select * from Items where title ILIKE ? "+haltString+" ORDER BY closingtime";
 		if (category != 0)
 			sqlQuery = "select * from Items where title ILIKE ? AND category = ? AND halted = false ORDER BY closingtime";
 		//doesnt work?
