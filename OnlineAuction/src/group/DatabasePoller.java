@@ -132,7 +132,7 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Congratulations! The winning bid exceeds the reserve price on item:\n");
 				text.append(item.getTitle());
 				text.append("\nThe winning bid:\n");
-				text.append(item.getCurrentBiddingPrice());
+				text.append("$"+item.getCurrentBiddingPrice());
 				text.append("\nThe buyer's details are:\n");
 				text.append("Name: "+buyer.getFname() + " " + buyer.getLname()+"\n");
 				text.append("Email: "+buyer.getUseremail()+"\n");
@@ -154,7 +154,7 @@ class DatabasePollerWorker implements Runnable {
 				text.append("Congratulations! You are the winning bid on item:\n");
 				text.append(item.getTitle());
 				text.append("\nYour winning bid:\n");
-				text.append(item.getCurrentBiddingPrice());
+				text.append("$"+item.getCurrentBiddingPrice());
 				text.append("\nThe sellers's details are:\n");
 				text.append("Email: "+owner.getUseremail()+"\n");
 				text.append("\nPlease contact the seller for further enquiries\n");
@@ -167,6 +167,40 @@ class DatabasePollerWorker implements Runnable {
 			// send user message and item owner needs to accept or reject
 			System.out.println("Winning bid less than reserve: "+item.getTitle());
 			buyer = UserBean.initializeFromId(conn, item.getCurrentBidder());
+			try {
+				MailSenderService mail = MailSenderService.getMailSender();
+				StringBuffer text = new StringBuffer();
+				text.append("The winning bid is less than the reserve price on item:\n");
+				text.append(item.getTitle());
+				text.append("\nThe winning bid:\n");
+				text.append("$"+item.getCurrentBiddingPrice());
+				text.append("\nThe reserve price:\n");
+				text.append("$"+item.getRprice());
+				text.append("\nThe buyer's details are:\n");
+				text.append("Name: "+buyer.getFname() + " " + buyer.getLname()+"\n");
+				text.append("Email: "+buyer.getUseremail()+"\n");
+				text.append("Credit Card: "+buyer.getCreditcard()+"\n");
+				text.append("Address: "+buyer.getFulladdress()+"\n");
+				text.append("\nPlease log into your account to accept or reject the bid\n");
+				mail.sendMessage(owner.getUseremail(), "Your Auction is Finished: '"+item.getTitle()+"'", text);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				MailSenderService mail = MailSenderService.getMailSender();
+				StringBuffer text = new StringBuffer();
+				text.append("You are the winning bid on item, but the bid is lower than the reserve price\n");
+				text.append(item.getTitle());
+				text.append("\nYour winning bid:\n");
+				text.append("$"+item.getCurrentBiddingPrice());
+				text.append("\nThe sellers's details are:\n");
+				text.append("Email: "+owner.getUseremail()+"\n");
+				text.append("\nThe buyer has the right to reject this bid\n");
+				text.append("\nPlease await contact from the seller\n");
+				mail.sendMessage(buyer.getUseremail(), "You are the winning bid on: '"+item.getTitle()+"'", text);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

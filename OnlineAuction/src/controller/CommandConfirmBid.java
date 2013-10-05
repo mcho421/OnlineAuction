@@ -91,6 +91,7 @@ public class CommandConfirmBid implements Command {
 			}
 			bid.insert(conn);
 
+			System.out.println("1: hasPrevBidder:"+hasPrevBidder+" user.getUserid():"+user.getUserid()+" prevBidder.getUserid():"+prevBidder.getUserid());
 			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,9 +102,11 @@ public class CommandConfirmBid implements Command {
 			if (conn != null)
 				conn.close();
 		}
+		System.out.println("2: hasPrevBidder:"+hasPrevBidder+" user.getUserid():"+user.getUserid()+" prevBidder.getUserid():"+prevBidder.getUserid());
 		
 		// send email
 		if (hasPrevBidder && (user.getUserid() != prevBidder.getUserid())) {
+			System.out.println("Someone is outbidden");
 			try {
 				//send msg
 				Message.sendMsg("You have been outbidden on item:"+item.getTitle(), user.getUsername());

@@ -30,7 +30,7 @@ You have successfully placed a bid on the following item:
 
 	<tr>
 		<td>
-			<form name="backToItem" action="controller" method="post">
+			<form name="backToItem" action="controller" method="get">
 				<input type="hidden" name="action" value="itemPage"/>
 				<input type="hidden" name="item" value="${item.id}"/>
 				<input type="submit" value="Back to item">

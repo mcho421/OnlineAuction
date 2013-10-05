@@ -24,6 +24,7 @@
 			<table>
 				<tr><td><b>Time left: </b>${item.timeLeft}</td></tr>
 				<tr><td><b>Current bid: $ ${item.currentBiddingPrice}</b></td></tr>
+				<c:if test="${item.isClosed() == false}">
 				<tr><td>
 					<form name="bidform" action="controller" method="post">
 						<input type="hidden" name="action" value="confirmBid"/>
@@ -34,6 +35,16 @@
 							
 				</td></tr>
 				<tr><td>Minimum bid $ ${item.minimumBid} or more</td></tr>
+			    </c:if>
+				<c:if test="${canDisplayAcceptReject}">
+				<tr><td>
+					<form name="acceptReject" action="controller" method="get">
+						<input type="hidden" name="action" value="acceptRejectBid"/>
+						<input type="hidden" name="item" value="${item.id}"/>
+						<input type="submit" name="status" value ="Accept"><input type="submit" name="status" value ="Reject">
+					</form>
+				</td></tr>
+			    </c:if>
 			</table>
 		</td>
 	</tr>
