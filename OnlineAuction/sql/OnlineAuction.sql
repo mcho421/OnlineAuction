@@ -61,8 +61,9 @@ CREATE TABLE Bids (
 CREATE TABLE ProfileMessages (
     id SERIAL,
     message TEXT NOT NULL,
-    read BOOLEAN NOT NULL,
+    read BOOLEAN NOT NULL DEFAULT false,
     owner INTEGER NOT NULL,
+    senttime timestamp without time zone NOT NULL DEFAULT now(),
     PRIMARY KEY (id),
     FOREIGN KEY (owner) REFERENCES Users(id)
 );

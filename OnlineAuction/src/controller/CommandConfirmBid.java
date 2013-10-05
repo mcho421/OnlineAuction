@@ -25,7 +25,7 @@ public class CommandConfirmBid implements Command {
 	private static final String page = "/BidSuccess.jsp";
 	private static final String error = "/WEB-INF/error.jsp";
 	private static final String login = "/controller?action=loginPage";
-
+	private static final String admin = "/controller?action=adminpage";
 	public CommandConfirmBid() {
 		super();
 	}
@@ -37,7 +37,7 @@ public class CommandConfirmBid implements Command {
 		if (!Controller.isLoggedIn(request, response))
 			return login;
 		if(Controller.isAdmin(request, response))
-			return login;
+			return admin;
 
 		String itemIdString = request.getParameter("item");
 		String bidAmountString = request.getParameter("bidAmount");
