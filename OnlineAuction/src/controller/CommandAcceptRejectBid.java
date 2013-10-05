@@ -111,7 +111,7 @@ public class CommandAcceptRejectBid implements Command {
 				}
 				try {
 					//send msg
-					Message.sendMsg("Your bid has been accepted on the item:"+item.getTitle(), user.getUsername());
+					Message.sendMsg("Your bid has been accepted on the item:"+item.getTitle(), buyer.getUsername());
 					
 					MailSenderService mail = MailSenderService.getMailSender();
 					StringBuffer text = new StringBuffer();
@@ -124,7 +124,7 @@ public class CommandAcceptRejectBid implements Command {
 							+ "controller?action=itemPage&item="
 							+ item.getId();
 					text.append(link);
-					mail.sendMessage(user.getUseremail(), "Your bid has been accepted on '"+item.getTitle()+"'", text);
+					mail.sendMessage(buyer.getUseremail(), "Your bid has been accepted on '"+item.getTitle()+"'", text);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -151,7 +151,7 @@ public class CommandAcceptRejectBid implements Command {
 				}
 				try {
 					//send msg
-					Message.sendMsg("Your bid has been rejected on the item:"+item.getTitle(), user.getUsername());
+					Message.sendMsg("Your bid has been rejected on the item:"+item.getTitle(), buyer.getUsername());
 					
 					MailSenderService mail = MailSenderService.getMailSender();
 					StringBuffer text = new StringBuffer();
@@ -164,7 +164,7 @@ public class CommandAcceptRejectBid implements Command {
 							+ "controller?action=itemPage&item="
 							+ item.getId();
 					text.append(link);
-					mail.sendMessage(user.getUseremail(), "Your bid has been rejected on '"+item.getTitle()+"'", text);
+					mail.sendMessage(buyer.getUseremail(), "Your bid has been rejected on '"+item.getTitle()+"'", text);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
