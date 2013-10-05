@@ -29,6 +29,7 @@ private Timestamp ctime = new Timestamp(System.currentTimeMillis());
 private boolean halted;
 private int seller;
 private int currentBidder;
+private int currentBidId;
 
 public int getId() {
 	return id;
@@ -108,6 +109,12 @@ public void setCurrentBiddingPrice(int currentBiddingPrice) {
 public int getCurrentBiddingPrice() {
 	return currentBiddingPrice;
 }
+public void setCurrentBidId(int currentBidId) {
+	this.currentBidId = currentBidId;
+}
+public int getCurrentBidId() {
+	return currentBidId;
+}
 public void setCurrentBidder(int currentBidder) {
 	this.currentBidder = currentBidder;
 }
@@ -161,12 +168,9 @@ public String getTimeLeft() {
 	return "Unknown";
 }
 public boolean canAcceptReject(Connection conn, String username) throws SQLException {
-	// temp
-	if (true)
-		return true;
 	if (!isClosed())
 		return false;
-	if (getCurrentBidder() == 0)
+	if (getCurrentBidId() == 0)
 		return false;
 	if (getCurrentBiddingPrice() >= getRprice())
 		return false;
@@ -293,6 +297,7 @@ public static void updateCurrentBid(Connection conn, Item i) throws SQLException
 		if (rs.next()) {
 			i.setCurrentBidder(rs.getInt(1));
 			i.setCurrentBiddingPrice(rs.getInt(2));
+			i.setCurrentBidId(rs.getInt(3));
 			System.out.println("has bidder. id="+rs.getInt(3)+" price="+rs.getInt(2)+" when seaching for item.id="+i.getId());
 		} else {
 			System.out.println("no bidder");

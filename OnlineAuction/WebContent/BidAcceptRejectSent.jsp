@@ -12,8 +12,14 @@
 <body>
 <%@ include file="/WEB-INF/header.jsp" %>
 
-<h1>Bid Accept/Reject!</h1>
-You have accepted/rejected the bid on the item:
+<h1>Bid 
+<c:if test="${accept == true}">Accepted</c:if>
+<c:if test="${accept == true}">Rejected</c:if>
+</h1>
+You have 
+<c:if test="${accept == true}">accepted</c:if>
+<c:if test="${accept == true}">rejected</c:if> 
+the bid on the item:
 <br><br>
 <table>
 	<tr>

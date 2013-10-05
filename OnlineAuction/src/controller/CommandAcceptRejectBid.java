@@ -39,6 +39,23 @@ public class CommandAcceptRejectBid implements Command {
 			return login;
 
 		String itemIdString = request.getParameter("item");
+		String statusString = request.getParameter("status");
+		
+		boolean accept = false;
+		if (statusString == null) {
+			request.setAttribute("errorMsg", "You did not accept/reject the bid");
+			return error;
+		} else if (statusString.equals("Accept")) {
+			accept = true;
+		} else if (statusString.equals("Reject")) {
+			accept = false;
+		} else {
+			request.setAttribute("errorMsg", "You did not accept/reject the bid");
+			return error;
+		}
+		request.setAttribute("accept", accept);
+		
+		System.out.println("status:"+statusString);
 		int itemId = 0;
 		try {
 		    itemId = Integer.parseInt(itemIdString);
@@ -48,46 +65,98 @@ public class CommandAcceptRejectBid implements Command {
 
 		String username = Controller.getUsername(request, response);
 		UserBean user = new UserBean();
-		boolean hasPrevBidder = false;
-		UserBean prevBidder = new UserBean();
-		int oldPrice = 0;
-		Bid bid = new Bid();
+		UserBean buyer = new UserBean();
 		Item item = new Item();
+		Bid bid = new Bid();
 		Connection conn = null;
 		
 		try {
 			conn = DBConnectionFactory.getConnection();
-			conn.setAutoCommit(false);
+			//conn.setAutoCommit(false);
 			
 			item = Item.initializeFromId(conn, itemId);
 			user = UserBean.initializeFromUsername(conn, username);
+			bid = Bid.initializeFromId(conn, item.getCurrentBidId());
 			
 			if (user.getUserid() != item.getSeller()) {
 				request.setAttribute("errorMsg", "You are not the owner of this item");
 				return error;
 			}
-			
-			if (true) // temp
-				return page;
-
-			
-			if (item.isClosed()) {
-				request.setAttribute("errorMsg", "Auction is closed");
+			if (item.canAcceptReject(conn, username) == false) {
+				request.setAttribute("errorMsg", "You cannot accept/reject this bid");
 				return error;
 			}
-			oldPrice = item.getCurrentBiddingPrice();
-			if (bid.getBid() < item.getMinimumBid()) {
-				request.setAttribute("errorMsg", "Bid is lower than minimum bid");
-				return error;
+			buyer = UserBean.initializeFromId(conn, item.getCurrentBidder());
+			if (accept == true) {
+				System.out.println("ACCEPTING BID");
+				try {
+					MailSenderService mail = MailSenderService.getMailSender();
+					StringBuffer text = new StringBuffer();
+					text.append("You have accepted the bid on the item:\n");
+					text.append(item.getTitle());
+					text.append("\nLink to auction:\n");
+					String link = request.getScheme() + "://"
+							+ request.getServerName() +":" + request.getServerPort()
+							+ request.getContextPath() + "/"
+							+ "controller?action=itemPage&item="
+							+ item.getId();
+					text.append(link);
+					mail.sendMessage(user.getUseremail(), "You accepted the bid on '"+item.getTitle()+"'", text);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					MailSenderService mail = MailSenderService.getMailSender();
+					StringBuffer text = new StringBuffer();
+					text.append("Your bid has been accepted on the item:\n");
+					text.append(item.getTitle());
+					text.append("\nLink to auction:\n");
+					String link = request.getScheme() + "://"
+							+ request.getServerName() +":" + request.getServerPort()
+							+ request.getContextPath() + "/"
+							+ "controller?action=itemPage&item="
+							+ item.getId();
+					text.append(link);
+					mail.sendMessage(user.getUseremail(), "Your bid has been accepted on '"+item.getTitle()+"'", text);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				System.out.println("REJECTING BID");
+				try {
+					MailSenderService mail = MailSenderService.getMailSender();
+					StringBuffer text = new StringBuffer();
+					text.append("You have rejected the bid on the item:\n");
+					text.append(item.getTitle());
+					text.append("\nLink to auction:\n");
+					String link = request.getScheme() + "://"
+							+ request.getServerName() +":" + request.getServerPort()
+							+ request.getContextPath() + "/"
+							+ "controller?action=itemPage&item="
+							+ item.getId();
+					text.append(link);
+					mail.sendMessage(user.getUseremail(), "You rejected the bid on '"+item.getTitle()+"'", text);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					MailSenderService mail = MailSenderService.getMailSender();
+					StringBuffer text = new StringBuffer();
+					text.append("Your bid has been rejected on the item:\n");
+					text.append(item.getTitle());
+					text.append("\nLink to auction:\n");
+					String link = request.getScheme() + "://"
+							+ request.getServerName() +":" + request.getServerPort()
+							+ request.getContextPath() + "/"
+							+ "controller?action=itemPage&item="
+							+ item.getId();
+					text.append(link);
+					mail.sendMessage(user.getUseremail(), "Your bid has been rejected on '"+item.getTitle()+"'", text);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			if (item.getCurrentBidder() != 0) {
-				hasPrevBidder = true;
-				prevBidder = UserBean.initializeFromId(conn, item.getCurrentBidder());
-			}
-			bid.insert(conn);
-
-			System.out.println("1: hasPrevBidder:"+hasPrevBidder+" user.getUserid():"+user.getUserid()+" prevBidder.getUserid():"+prevBidder.getUserid());
-			conn.commit();
+			//conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (conn != null)
@@ -97,67 +166,6 @@ public class CommandAcceptRejectBid implements Command {
 			if (conn != null)
 				conn.close();
 		}
-		System.out.println("2: hasPrevBidder:"+hasPrevBidder+" user.getUserid():"+user.getUserid()+" prevBidder.getUserid():"+prevBidder.getUserid());
-		
-		// send email
-		if (hasPrevBidder && (user.getUserid() != prevBidder.getUserid())) {
-			System.out.println("Someone is outbidden");
-			try {
-				MailSenderService mail = MailSenderService.getMailSender();
-				StringBuffer text = new StringBuffer();
-				text.append("You have been outbidden on item:\n");
-				text.append(item.getTitle());
-				text.append("\nYour bid:\n");
-				text.append("$"+oldPrice);
-				text.append("\nNew bid:\n");
-				text.append("$"+bid.getBid());
-				text.append("\nThe auction is scheduled to end on:\n");
-				text.append(item.getCtime());
-				text.append("\nLink to auction:\n");
-				String link = request.getScheme() + "://"
-						+ request.getServerName() +":" + request.getServerPort()
-						+ request.getContextPath() + "/"
-						+ "controller?action=itemPage&item="
-						+ item.getId();
-				text.append(link);
-				mail.sendMessage(prevBidder.getUseremail(), "Outbidden on '"+item.getTitle()+"'", text);
-			} catch (ServiceLocatorException e) {
-				e.printStackTrace();
-			} catch (MailSenderException e) {
-				e.printStackTrace();
-			} catch (AddressException e) {
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			MailSenderService mail = MailSenderService.getMailSender();
-			StringBuffer text = new StringBuffer();
-			text.append("You have successfully made a bid on the item:\n");
-			text.append(item.getTitle());
-			text.append("\nYour bid:\n");
-			text.append("$"+bid.getBid());
-			text.append("\nThe auction is scheduled to end on:\n");
-			text.append(item.getCtime());
-			text.append("\nLink to auction:\n");
-			String link = request.getScheme() + "://"
-					+ request.getServerName() +":" + request.getServerPort()
-					+ request.getContextPath() + "/"
-					+ "controller?action=itemPage&item="
-					+ item.getId();
-			text.append(link);
-			mail.sendMessage(user.getUseremail(), "Successful bid on '"+item.getTitle()+"'", text);
-		} catch (ServiceLocatorException e) {
-			e.printStackTrace();
-		} catch (MailSenderException e) {
-			e.printStackTrace();
-		} catch (AddressException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-
 		request.setAttribute("item", item);
 		request.setAttribute("bid", bid);
 		return page;
