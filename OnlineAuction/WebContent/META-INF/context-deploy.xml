@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context debug="1" reloadable="true" crossContext="true">
+  <Resource name="jdbc/database" auth="Container"
+          type="javax.sql.DataSource" username="temp" password="comp9321"
+          driverClassName="org.postgresql.Driver" 
+          url="jdbc:postgresql://129.94.46.151:5432/test"
+          maxActive="8" maxIdle="4" maxWait="10000" logAbandoned="true" removeAbandonedTimeout="5" removeAbandoned="true"></Resource>
+  <Resource name="mail/Session" auth="Container"
+            type="javax.mail.Session"
+            mail.smtp.host="smtp.gmail.com"
+            mail.smtp.auth="true"
+            mail.smtp.user="onlineauctionnotifier@gmail.com"
+            mail.smtp.password="comp9321"
+            mail.smtp.starttls.enable="true"
+            mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory" 
+            mail.transport.protocol="smtp" 
+            mail.smtp.port="465"></Resource>
+</Context>

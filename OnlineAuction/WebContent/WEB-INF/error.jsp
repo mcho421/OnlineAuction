@@ -12,7 +12,7 @@
 ${errorMsg}
 <h2> Return to the home page ? </h2>
 <form action="controller">
-	<input type="submit" name="goBack" value="Go Back"/>
+	<input type="submit" name="goBack" value="Home"/>
 </form>
 </body>
 </html>
