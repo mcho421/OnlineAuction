@@ -1,6 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import = "group.UserBean" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<% 
+Object username=session.getAttribute("username"); 
+%> 
+<sql:query var="rs" dataSource="jdbc/database">
+Select count(profilemessages.id) from profilemessages Join users on users.id = profilemessages.owner and users.username ='${username}'
+and profilemessages.read = false
+</sql:query>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -16,9 +25,6 @@ scope="request" />
 </head>
 <body>
 <%@ include file="/WEB-INF/header.jsp" %>
-<% 
-Object username=session.getAttribute("username"); 
-%> 
 <script language="javascript">
 if(username==null) {
 	System.out.println("log in");
@@ -76,7 +82,9 @@ function on_submit()
 <tr>
 <td><input type="button" onclick="window.location.href='OfferItem.jsp'" value ="Offer an item"></td>
 <td><input type="button" onclick="window.location.href='controller?action=search'" value ="items on auction"></td>
-<td><input type="button" onclick="window.location.href='controller?action=message'" value ="message"></td>
+<c:forEach var="row" items = "${rs.rows}">
+<td><input type="button" onclick="window.location.href='controller?action=message'" value ="message (${row.count})"></td>
+</c:forEach>
 <td><input type="button" onclick="window.location.href='controller?action=logout'" value ="logout"></td>
 </tr>
 </table>
