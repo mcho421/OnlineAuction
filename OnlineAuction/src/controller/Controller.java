@@ -82,8 +82,27 @@ public class Controller extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
-		Command command = commandMap.get(action);
+		//if(action==null) action = "";
+		if(!isAdmin(request, response)){
 		String page = "/WEB-INF/error.jsp";
+		System.out.println("not admin");
+		//String action = request.getParameter("action");
+		if(action==null) {
+			Command command = commandMap.get(action);
+			if (command != null) {
+				try {
+					page = command.execute(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					request.setAttribute("errorMsg", "Database error");
+					page = "/WEB-INF/error.jsp";
+				}
+			} else {
+				request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+			}
+		}
+		else if(!action.equals("adminpage")&&!action.equals("adminuserspage")&&!action.equals("adminitemspage")&&!action.equals("banuser")&&!action.equals("haltitem")) {
+		Command command = commandMap.get(action);
 		if (command != null) {
 			try {
 				page = command.execute(request, response);
@@ -95,8 +114,53 @@ public class Controller extends HttpServlet {
 		} else {
 			request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
 		}
+		}
+		else{
+			request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+			page = "/WEB-INF/error.jsp";
+		}
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-		dispatcher.forward(request, response);
+		dispatcher.forward(request, response);}
+		else {
+			String page="/WEB-INF/error.jsp";
+			System.out.println("admin login");
+			if(action==null) {
+				Command command = commandMap.get(action);
+				if (command != null) {
+					try {
+						page = command.execute(request, response);
+					} catch (SQLException e) {
+						e.printStackTrace();
+						request.setAttribute("errorMsg", "Database error");
+						page = "/WEB-INF/error.jsp";
+					}
+				} else {
+					request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+				}
+			}
+			else if(action.equals("adminpage")||action.equals("adminuserspage")||action.equals("adminitemspage")||action.equals("banuser")||action.equals("haltitem")
+				||action.equals("logout")||action.equals("userIndexPage")) {
+			Command command = commandMap.get(action);
+			page = "/WEB-INF/error.jsp";
+			if (command != null) {
+				try {
+					page = command.execute(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					request.setAttribute("errorMsg", "Database error");
+					page = "/WEB-INF/error.jsp";
+				}
+			} else {
+				request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+			}
+			}
+			else {
+				request.setAttribute("errorMsg", "Invalid action '" + action + "'.");
+				page = "/WEB-INF/error.jsp";
+			}
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+			dispatcher.forward(request, response);
+		}
 	}
 	
 	public static boolean isLoggedIn(HttpServletRequest request, HttpServletResponse response) {
